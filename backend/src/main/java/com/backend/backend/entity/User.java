@@ -32,4 +32,9 @@ public class User {
     @Enumerated(EnumType.STRING) // Stores the Enum as a String ("STUDENT") in the database
     @Column(nullable = false)
     private Role role; // Stores the user's role ("STUDENT", "ADMIN")
+
+    // Stores the token generated for password reset functionality
+    private String resetPasswordToken;
+    // Stores the time when the reset token will expire
+    private java.time.LocalDateTime resetPasswordTokenExpiry;
 }

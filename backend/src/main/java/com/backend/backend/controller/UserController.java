@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.backend.backend.dto.ForgotPasswordDto;
+import com.backend.backend.dto.ResetPasswordDto;
 
 /**
  * REST Controller for User Profile operations.
@@ -30,6 +32,22 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         String response = userService.changePassword(changePasswordDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDto forgotPasswordDto) {
+        String response = userService.forgotPassword(forgotPasswordDto.getEmail());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint to reset password using the token.
+     * URL: POST http://localhost:8080/api/users/reset-password
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        String response = userService.resetPassword(resetPasswordDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

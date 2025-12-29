@@ -19,4 +19,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return An Optional containing the User if found, or empty if not.
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Finds a user by their reset password token.
+     * Used during the password reset process to verify validity.
+     *
+     * @param resetPasswordToken The token received from the user.
+     * @return Optional User object.
+     */
+    Optional<User> findByResetPasswordToken(String resetPasswordToken);
 }

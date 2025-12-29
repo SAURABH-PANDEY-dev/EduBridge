@@ -1,6 +1,7 @@
 package com.backend.backend.service;
 
 import com.backend.backend.dto.ChangePasswordDto;
+import com.backend.backend.dto.ResetPasswordDto;
 
 /**
  * Service Interface for User Profile Management.
@@ -14,4 +15,12 @@ public interface UserService {
      * @return A success message string.
      */
     String changePassword(ChangePasswordDto changePasswordDto);
+    String forgotPassword(String email);
+
+    /**
+     * Resets the password using a valid token.
+     * @param resetPasswordDto Contains token and new password.
+     * @return Success message.
+     */
+    String resetPassword(ResetPasswordDto resetPasswordDto);
 }

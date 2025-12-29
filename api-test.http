@@ -14,19 +14,19 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "student@example.com",
-  "password": "newPassword7890"
+  "email": "saurabhpandey8908@gmail.com",
+  "password": "brandNewPassword123"
 }
 
-### Test 3 : Register User 2
+### Test 3 : Register User
 POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "Test Student3",
-  "email": "student3@example.com",
-  "password": "password1234",
-  "role": "STUDENT"
+  "name": "Saurabh Pandey",
+  "email": "saurabhpandey8908@gmail.com",
+  "password": "password963",
+  "role": "ADMIN"
 }
 
 ### Test 4: Change Password
@@ -38,4 +38,22 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50QGV4YW1wbGUuY29tI
   "currentPassword": "newPassword789",
   "newPassword": "newPassword7890",
   "confirmationPassword": "newPassword7890"
+}
+
+### Test 5: Forgot Password
+POST http://localhost:8080/api/users/forgot-password
+Content-Type: application/json
+
+{
+  "email": "saurabhpandey8908@gmail.com"
+}
+
+### Test 5: Reset Password (Using Token)
+POST http://localhost:8080/api/users/reset-password
+Content-Type: application/json
+
+{
+  "token": "f876e779-c80a-4599-97eb-71fb5010579c",
+  "newPassword": "brandNewPassword123",
+  "confirmPassword": "brandNewPassword123"
 }

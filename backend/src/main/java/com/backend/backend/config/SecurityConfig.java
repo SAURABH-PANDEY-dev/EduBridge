@@ -42,9 +42,10 @@ public class SecurityConfig {
 
         http.csrf((csrf) -> csrf.disable()) // Disabling CSRF as we will use JWT (Stateless)
                 .authorizeHttpRequests((authorize) -> {
-                    // Allow anyone to access the registration and login APIs
+                    // Allow anyone to access these APIs
                     authorize.requestMatchers("/api/auth/**").permitAll();
-
+                    authorize.requestMatchers("/api/users/forgot-password").permitAll();
+                    authorize.requestMatchers("/api/users/reset-password").permitAll();
                     // Lock down everything else - requires authentication
                     authorize.anyRequest().authenticated();
                 });
