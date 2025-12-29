@@ -30,4 +30,5 @@ public interface MaterialService {
      * @return List of approved materials.
      */
     List<Material> getAllApprovedMaterials();
+    List<MaterialResponseDto> getPendingMaterials();
 }

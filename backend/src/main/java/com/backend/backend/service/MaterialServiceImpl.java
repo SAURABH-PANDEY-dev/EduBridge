@@ -76,4 +76,15 @@ public class MaterialServiceImpl implements MaterialService {
         // Only return materials that have been approved by an Admin
         return materialRepository.findByStatus("APPROVED");
     }
+
+    @Override
+    public List<MaterialResponseDto> getPendingMaterials() {
+        // Fetch all materials from DB with status "PENDING"
+        List<Material> pendingMaterials = materialRepository.findByStatus("PENDING");
+
+        // Convert them to DTOs so passwords are hidden
+        return pendingMaterials.stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 }

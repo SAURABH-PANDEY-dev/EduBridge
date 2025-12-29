@@ -40,4 +40,14 @@ public class MaterialController {
         List<Material> materials = materialService.getAllApprovedMaterials();
         return new ResponseEntity<>(materials, HttpStatus.OK);
     }
+
+    /**
+     * Endpoint for ADMIN to view all pending materials.
+     * URL: GET http://localhost:8080/api/materials/pending
+     */
+    @GetMapping("/pending")
+    public ResponseEntity<List<MaterialResponseDto>> getPendingMaterials() {
+        List<MaterialResponseDto> pendingMaterials = materialService.getPendingMaterials();
+        return new ResponseEntity<>(pendingMaterials, HttpStatus.OK);
+    }
 }

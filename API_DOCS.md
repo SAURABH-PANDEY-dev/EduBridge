@@ -100,3 +100,54 @@ For users who cannot log in.
 }
 ```
 <hr>
+
+### 📂 Material Management
+
+### 1. Upload Material 
+Uploads a file (PDF/Image) to Cloudinary. PDFs are stored in the 'raw' bucket with `.pdf` extension preserved.
+* **URL:** `/api/materials/upload`
+* **Method:** `POST`
+* **Content-Type:** `multipart/form-data`
+* **Headers:**  `Authorization`: Bearer <Token>
+* **Body (Form Data):**
+  * `file`: (File) - The file.
+  * `title`: (String)
+  * `description`: (String)
+  * `subject`: (String)
+* **Response (201 Created):**
+```json
+{
+  "id": 15,
+  "title": "Java Notes",
+  "description": "Chapter 1",
+  "fileUrl": "[https://res.cloudinary.com/.../raw/upload/v1234/Java_Notes_176702.pdf](https://res.cloudinary.com/.../raw/upload/v1234/Java_Notes_176702.pdf)",
+  "uploadedBy": "Student Name",
+  "uploadDate": "2025-12-30T10:00:00",
+  "status": "PENDING"
+}
+```
+<hr>
+
+### 2. Get Pending Materials (Admin Only)
+   Fetches a list of all materials waiting for approval.
+
+* **Endpoint:** `/api/materials/pending`
+* **Method:** `GET`
+* **Headers:** `Authorization: Bearer <Admin_Token>`
+
+**Response (200 OK):**
+```JSON
+[
+  {
+    "id": 15,
+    "title": "Java Notes",
+    "subject": "Java",
+    "status": "PENDING",
+    "fileUrl": "...",
+    "uploadedBy": "Student Name"
+  }
+]
+```
+
+<hr>
+
