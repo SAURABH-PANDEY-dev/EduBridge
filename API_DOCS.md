@@ -169,5 +169,4 @@ Permanently removes a material from the database and deletes the associated file
 - **Success Response:**
   - **Code:** 200 OK
   - **Content:** `"Material and associated file deleted successfully."`
-
 <hr>
