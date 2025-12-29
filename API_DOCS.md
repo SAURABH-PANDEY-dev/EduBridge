@@ -161,3 +161,13 @@ Changes the status of a material from PENDING to APPROVED.
   - **Content:** `"Material approved successfully."`
 <hr>
 
+### Delete Material
+Permanently removes a material from the database and deletes the associated file from Cloudinary.
+- **Endpoint:** `/api/materials/{id}`
+- **Method:** `DELETE`
+- **Auth Required:** Yes (ROLE_ADMIN)
+- **Success Response:**
+  - **Code:** 200 OK
+  - **Content:** `"Material and associated file deleted successfully."`
+
+<hr>

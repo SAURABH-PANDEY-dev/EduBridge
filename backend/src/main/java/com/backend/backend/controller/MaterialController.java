@@ -60,4 +60,14 @@ public class MaterialController {
         materialService.approveMaterial(id);
         return new ResponseEntity<>("Material approved successfully.", HttpStatus.OK);
     }
+
+    /**
+     * Endpoint for ADMIN to delete a material (DB + Cloudinary).
+     * URL: DELETE http://localhost:8080/api/materials/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMaterial(@PathVariable Long id) {
+        materialService.deleteMaterial(id);
+        return new ResponseEntity<>("Material and associated file deleted successfully.", HttpStatus.OK);
+    }
 }

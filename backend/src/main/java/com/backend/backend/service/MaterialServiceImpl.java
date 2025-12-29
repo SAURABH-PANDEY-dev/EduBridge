@@ -96,4 +96,19 @@ public class MaterialServiceImpl implements MaterialService {
         material.setStatus("APPROVED");
         materialRepository.save(material);
     }
+
+    @Override
+    public void deleteMaterial(Long id) {
+        // 1. Find the material
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found with id: " + id));
+
+        // 2. Delete the actual file from Cloudinary
+        if (material.getFileUrl() != null) {
+            cloudinaryService.deleteFile(material.getFileUrl());
+        }
+
+        // 3. Delete from Database
+        materialRepository.delete(material);
+    }
 }

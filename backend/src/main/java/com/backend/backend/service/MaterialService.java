@@ -33,4 +33,5 @@ public interface MaterialService {
     List<MaterialResponseDto> getPendingMaterials();
     // Approve a material
     void approveMaterial(Long id);
+    void deleteMaterial(Long id);
 }

@@ -68,7 +68,7 @@ Content-Type: application/json
 
 ### Test 7: Upload Material (Multipart)
 POST http://localhost:8080/api/materials/upload
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMjI4MjUsImV4cCI6MTc2NzEwOTIyNX0.mbMmDPbVzr9t5LLElI8gv_osm3v99bhr5K-V20zFEeg2zmxPhLsD5cGKt3x2Akkp
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -88,7 +88,7 @@ Content-Disposition: form-data; name="type"
 
 NOTE
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Disposition: form-data; name="file"; filename="new_test.pdf"
 
 < ./test.pdf
 --WebAppBoundary--
@@ -99,9 +99,11 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnb
 Content-Type: application/json
 
 
-### Test 9 :  Approve a Material
-PUT http://localhost:8080/api/materials/35/approve
+### Test 9 :  Approve a Material (Replace 10 with actual ID)
+PUT http://localhost:8080/api/materials/10/approve
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K
 Content-Type: application/json
 
-###
+### Delete a Material (Replace '15' with actual ID)
+DELETE http://localhost:8080/api/materials/14
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K

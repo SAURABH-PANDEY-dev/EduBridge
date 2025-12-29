@@ -49,4 +49,20 @@ public class CloudinaryService {
             throw new RuntimeException("File upload failed: " + e.getMessage());
         }
     }
+
+    public void deleteFile(String fileUrl) {
+        try {
+            // 1. Extract Public ID from URL
+            //  format: .../raw/upload/v12345678/filename.pdf
+            // We need just "filename.pdf"
+            String publicId = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+
+            // 2. Delete from Cloudinary (Specify 'raw' because we uploaded it as raw)
+            Map options = ObjectUtils.asMap("resource_type", "raw");
+            cloudinary.uploader().destroy(publicId, options);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file from Cloudinary: " + e.getMessage());
+        }
+    }
 }
