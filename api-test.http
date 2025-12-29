@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "Test Student",
-  "email": "student@example.com",
+  "email": "student5@example.com",
   "password": "password123",
   "role": "STUDENT"
 }
@@ -16,6 +16,14 @@ Content-Type: application/json
 {
   "email": "saurabhpandey8908@gmail.com",
   "password": "brandNewPassword123"
+}
+### Test : Login User (Get Token)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "student5@example.com",
+  "password": "password123"
 }
 
 ### Test 3 : Register User
@@ -32,7 +40,7 @@ Content-Type: application/json
 ### Test 4: Change Password
 POST http://localhost:8080/api/users/change-password
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50QGV4YW1wbGUuY29tIiwiaWF0IjoxNzY2OTk1ODA0LCJleHAiOjE3NjcwODIyMDR9.2ReRPq1X3tIWl9-3XA-sQbpb97EIgA9IBr9mR4KtG_YO8_2gNMBSoPMGbDOFlwxf
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMjI4MjUsImV4cCI6MTc2NzEwOTIyNX0.mbMmDPbVzr9t5LLElI8gv_osm3v99bhr5K-V20zFEeg2zmxPhLsD5cGKt3x2Akkp
 
 {
   "currentPassword": "newPassword789",
@@ -48,7 +56,7 @@ Content-Type: application/json
   "email": "saurabhpandey8908@gmail.com"
 }
 
-### Test 5: Reset Password (Using Token)
+### Test 6: Reset Password (Using Token)
 POST http://localhost:8080/api/users/reset-password
 Content-Type: application/json
 
@@ -57,3 +65,30 @@ Content-Type: application/json
   "newPassword": "brandNewPassword123",
   "confirmPassword": "brandNewPassword123"
 }
+
+### Test 7: Upload Material (Multipart)
+POST http://localhost:8080/api/materials/upload
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMjI4MjUsImV4cCI6MTc2NzEwOTIyNX0.mbMmDPbVzr9t5LLElI8gv_osm3v99bhr5K-V20zFEeg2zmxPhLsD5cGKt3x2Akkp
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+
+Java Basics - Chapter 1
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+Introduction to Java syntax and loops.
+--WebAppBoundary
+Content-Disposition: form-data; name="subject"
+
+Java Programming
+--WebAppBoundary
+Content-Disposition: form-data; name="type"
+
+NOTE
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.pdf"
+
+< ./test.pdf
+--WebAppBoundary--
