@@ -151,3 +151,13 @@ Uploads a file (PDF/Image) to Cloudinary. PDFs are stored in the 'raw' bucket wi
 
 <hr>
 
+### Approve Material
+Changes the status of a material from PENDING to APPROVED.
+- **Endpoint:** `/api/materials/{id}/approve`
+- **Method:** `PUT`
+- **Auth Required:** Yes (ROLE_ADMIN)
+- **Success Response:**
+  - **Code:** 200 OK
+  - **Content:** `"Material approved successfully."`
+<hr>
+

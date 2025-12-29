@@ -50,4 +50,14 @@ public class MaterialController {
         List<MaterialResponseDto> pendingMaterials = materialService.getPendingMaterials();
         return new ResponseEntity<>(pendingMaterials, HttpStatus.OK);
     }
+
+    /**
+     * Endpoint for ADMIN to approve a material.
+     * URL: PUT http://localhost:8080/api/materials/{id}/approve
+     */
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<String> approveMaterial(@PathVariable Long id) {
+        materialService.approveMaterial(id);
+        return new ResponseEntity<>("Material approved successfully.", HttpStatus.OK);
+    }
 }

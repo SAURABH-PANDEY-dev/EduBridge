@@ -97,3 +97,11 @@ Content-Disposition: form-data; name="file"; filename="test.pdf"
 GET http://localhost:8080/api/materials/pending
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K
 Content-Type: application/json
+
+
+### Test 9 :  Approve a Material
+PUT http://localhost:8080/api/materials/35/approve
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K
+Content-Type: application/json
+
+###

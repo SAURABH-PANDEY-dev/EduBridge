@@ -31,4 +31,6 @@ public interface MaterialService {
      */
     List<Material> getAllApprovedMaterials();
     List<MaterialResponseDto> getPendingMaterials();
+    // Approve a material
+    void approveMaterial(Long id);
 }

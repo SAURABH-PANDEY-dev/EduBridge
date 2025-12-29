@@ -87,4 +87,13 @@ public class MaterialServiceImpl implements MaterialService {
                 .map(this::mapToDto)
                 .toList();
     }
+
+    @Override
+    public void approveMaterial(Long id) {
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found with id: " + id));
+
+        material.setStatus("APPROVED");
+        materialRepository.save(material);
+    }
 }
