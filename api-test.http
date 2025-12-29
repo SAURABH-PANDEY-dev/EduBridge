@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
   "email": "student@example.com",
-  "password": "password123"
+  "password": "newPassword7890"
 }
 
 ### Test 3 : Register User 2
@@ -27,4 +27,15 @@ Content-Type: application/json
   "email": "student3@example.com",
   "password": "password1234",
   "role": "STUDENT"
+}
+
+### Test 4: Change Password
+POST http://localhost:8080/api/users/change-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50QGV4YW1wbGUuY29tIiwiaWF0IjoxNzY2OTk1ODA0LCJleHAiOjE3NjcwODIyMDR9.2ReRPq1X3tIWl9-3XA-sQbpb97EIgA9IBr9mR4KtG_YO8_2gNMBSoPMGbDOFlwxf
+
+{
+  "currentPassword": "newPassword789",
+  "newPassword": "newPassword7890",
+  "confirmationPassword": "newPassword7890"
 }

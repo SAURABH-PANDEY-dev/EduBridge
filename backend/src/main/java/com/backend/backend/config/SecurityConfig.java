@@ -1,5 +1,7 @@
 package com.backend.backend.config;
 
+import com.backend.backend.security.JwtAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,14 +11,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Configuration class for Spring Security.
  * This class defines how users are authenticated and which URLs are accessible.
  */
+@AllArgsConstructor
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
      * Creates a PasswordEncoder bean.
@@ -43,7 +48,8 @@ public class SecurityConfig {
                     // Lock down everything else - requires authentication
                     authorize.anyRequest().authenticated();
                 });
-
+        // Add our custom JWT Filter before the standard UsernamePasswordAuthenticationFilter
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

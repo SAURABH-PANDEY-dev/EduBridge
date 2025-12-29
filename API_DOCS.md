@@ -55,3 +55,23 @@ Returns a JWT Token string :
 "Example" : eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50QGV4YW1wbGUuY29tIiwiaWF0IjoxNzY2OTE1NDU0LCJleHAiOjE3NjcwMDE4NTR9.7y4Wxk3sxLSW4uqfak4ReXoTyArenoX6WaLg7Tv0x9vshnl1Tg3_L9m1KiBB-k0N
 This token must be included in the header of all future requests: Authorization: Bearer <token>
 ```
+
+### C. Change Password
+Allows a logged-in user to change their password.
+
+* **Endpoint:** `/api/users/change-password`
+* **Method:** `POST`
+* **Headers:**
+    * `Authorization`: `Bearer <your_token_here>`
+* **Content-Type:** `application/json`
+
+**Request Body:**
+```json
+{
+  "currentPassword": "oldPassword123",
+  "newPassword": "newPassword789",
+  "confirmationPassword": "newPassword789"
+}
+```
+
+**Success Response (200 OK):** Password changed successfully!
