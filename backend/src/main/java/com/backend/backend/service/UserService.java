@@ -1,10 +1,8 @@
 package com.backend.backend.service;
 
-import com.backend.backend.dto.ChangePasswordDto;
-import com.backend.backend.dto.ResetPasswordDto;
-import com.backend.backend.dto.MaterialResponseDto;
-import com.backend.backend.dto.UserDto;
-import com.backend.backend.dto.UserResponseDto;
+import com.backend.backend.dto.*;
+import com.backend.backend.dto.PostResponseDto;
+
 import java.util.List;
 
 /**
@@ -36,4 +34,9 @@ public interface UserService {
 
     // Get uploads by current user
     List<MaterialResponseDto> getMyUploads();
+
+    // Methods for My Activity
+    List<MaterialResponseDto> getMyDownloads();
+    List<PostResponseDto> getMyPosts();
+    List<CommentResponseDto> getMyComments();
 }

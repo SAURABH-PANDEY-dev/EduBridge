@@ -11,6 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.backend.backend.entity.DownloadLog;
+import com.backend.backend.repository.DownloadLogRepository;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+
 import java.util.List;
 
 @Service
@@ -20,6 +24,7 @@ public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
+    private final DownloadLogRepository downloadLogRepository;
 
     @Override
     public MaterialResponseDto uploadMaterial(MaterialDto materialDto) {
@@ -126,12 +131,29 @@ public class MaterialServiceImpl implements MaterialService {
     public String downloadMaterial(Long id) {
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Material not found"));
-        // 1. Count++
+
+        // 1. Counter++
         material.setDownloadCount(material.getDownloadCount() + 1);
         materialRepository.save(material);
-        // 2.URL to return
+
+        // 2. if User Logged-in then, History Log create
+        try {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            // Check if there is a "anonymousUser" user
+            if (!email.equals("anonymousUser")) {
+                userRepository.findByEmail(email).ifPresent(user -> {
+                    DownloadLog log = new DownloadLog();
+                    log.setUser(user);
+                    log.setMaterial(material);
+                    downloadLogRepository.save(log);
+                });
+            }
+        } catch (Exception e) {
+            //Failed login does not stop the download
+            System.out.println("Download logging failed: " + e.getMessage());
+        }
+
         return material.getFileUrl();
     }
-
 
 }

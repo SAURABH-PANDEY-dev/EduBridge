@@ -304,4 +304,33 @@ Fetch all materials uploaded by the user with their status (PENDING/APPROVED).
 * **Auth:** `Yes`
 
 <hr>
+
+### 4. My Download History
+Fetch the list of materials downloaded by the user.
+* **Endpoint:** `/api/users/activity/downloads`
+* **Method:** `GET`
+* **Auth:** Yes
+* **Response:** List of Downloaded items
+
 <hr>
+
+### 5. My Posts History
+Fetch all discussion posts created by the user.
+* **Endpoint:** `/api/users/activity/posts`
+* **Method:** `GET`
+* **Auth:** Yes
+* **Response:** List of `My Posts`
+
+<hr>
+
+### 6. My Comments History
+Fetch all comments made by the user on various posts.
+* **Endpoint:** `/api/users/activity/comments`
+* **Method:** `GET`
+* **Auth:** Yes
+* **Response:** List of `Comments`
+
+<hr>
+<hr>
+<hr>
+

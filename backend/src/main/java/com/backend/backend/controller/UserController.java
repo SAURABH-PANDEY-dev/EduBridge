@@ -1,6 +1,7 @@
 package com.backend.backend.controller;
 
-import com.backend.backend.dto.ChangePasswordDto;
+import com.backend.backend.dto.*;
+import com.backend.backend.dto.PostResponseDto;
 import com.backend.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,11 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.backend.backend.dto.ForgotPasswordDto;
-import com.backend.backend.dto.ResetPasswordDto;
-import com.backend.backend.dto.MaterialResponseDto;
-import com.backend.backend.dto.UserDto;
-import com.backend.backend.dto.UserResponseDto;
 import com.backend.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -77,5 +73,25 @@ public class UserController {
     @GetMapping("/uploads")
     public ResponseEntity<List<MaterialResponseDto>> getMyUploads() {
         return new ResponseEntity<>(userService.getMyUploads(), HttpStatus.OK);
+    }
+
+    // --- My Activity Section ---
+
+    // 4. My Downloads History
+    @GetMapping("/activity/downloads")
+    public ResponseEntity<List<MaterialResponseDto>> getMyDownloads() {
+        return new ResponseEntity<>(userService.getMyDownloads(), HttpStatus.OK);
+    }
+
+    // 5. My Posts
+    @GetMapping("/activity/posts")
+    public ResponseEntity<List<PostResponseDto>> getMyPosts() {
+        return new ResponseEntity<>(userService.getMyPosts(), HttpStatus.OK);
+    }
+
+    // 6. My Comments
+    @GetMapping("/activity/comments")
+    public ResponseEntity<List<CommentResponseDto>> getMyComments() {
+        return new ResponseEntity<>(userService.getMyComments(), HttpStatus.OK);
     }
 }

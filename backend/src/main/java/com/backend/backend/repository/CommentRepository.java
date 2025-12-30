@@ -7,4 +7,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     // Find all comments for a specific post
     List<Comment> findByPostId(Long postId);
+    List<Comment> findByUserOrderByCreationDateDesc(com.backend.backend.entity.User user);
 }

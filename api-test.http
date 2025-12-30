@@ -157,11 +157,11 @@ Authorization: Bearer {{student_token}}
 
 ### 3. Add Comment to the Post (Need Token & Post ID from above)
 POST http://localhost:8080/api/forum/comments
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{student_token}}
 Content-Type: application/json
 
 {
-  "content": "I am doing well brother",
+  "content": "I am doing well brother,and what are you learning currently",
   "postId": {{post_id}}
 }
 
@@ -189,3 +189,24 @@ Content-Type: application/json
 ### 3. Get My Uploads (Check Pending/Approved status)
 GET http://localhost:8080/api/users/uploads
 Authorization: Bearer {{student_token}}
+
+#==========================================
+# MY ACTIVITY
+# ==========================================
+
+### 1. Download as Logged-in User (To create history)
+GET http://localhost:8080/api/materials/15/download
+Authorization: Bearer {{student_token}}
+
+### 2. Get My Downloads History
+GET http://localhost:8080/api/users/activity/downloads
+Authorization: Bearer {{student_token}}
+
+### 3. Get My Posts
+GET http://localhost:8080/api/users/activity/posts
+Authorization: Bearer {{student_token}}
+
+### 4. Get My Comments
+GET http://localhost:8080/api/users/activity/comments
+Authorization: Bearer {{student_token}}
+

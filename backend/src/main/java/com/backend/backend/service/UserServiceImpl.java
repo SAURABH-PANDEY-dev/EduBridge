@@ -1,8 +1,9 @@
 package com.backend.backend.service;
 
-import com.backend.backend.dto.ChangePasswordDto;
+import com.backend.backend.dto.*;
+import com.backend.backend.dto.PostResponseDto;
 import com.backend.backend.entity.User;
-import com.backend.backend.repository.UserRepository;
+import com.backend.backend.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,14 +13,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import com.backend.backend.dto.ResetPasswordDto;
 
-import com.backend.backend.dto.MaterialResponseDto;
-import com.backend.backend.dto.UserDto;
-import com.backend.backend.dto.UserResponseDto;
 import com.backend.backend.entity.Material;
 import com.backend.backend.entity.User;
-import com.backend.backend.repository.MaterialRepository;
 import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.UserService;
 import lombok.AllArgsConstructor;
@@ -41,6 +37,9 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     private JavaMailSender mailSender;
     private final MaterialRepository materialRepository;
+    private final DownloadLogRepository downloadLogRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public String changePassword(ChangePasswordDto changePasswordDto) {
@@ -148,8 +147,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateMyProfile(UserDto userDto) {
         User user = getCurrentUser();
-
-        // Sirf wahi fields update karein jo allowed hain
         if (userDto.getName() != null) user.setName(userDto.getName());
         if (userDto.getUniversity() != null) user.setUniversity(userDto.getUniversity());
 
@@ -160,7 +157,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<MaterialResponseDto> getMyUploads() {
         User user = getCurrentUser();
-        // Repository mein ye method banana padega (Step 3 mein)
         List<Material> uploads = materialRepository.findByUploadedBy(user);
 
         return uploads.stream().map(this::mapToMaterialResponse).collect(Collectors.toList());
@@ -182,10 +178,51 @@ public class UserServiceImpl implements UserService {
         dto.setId(material.getId());
         dto.setTitle(material.getTitle());
         dto.setSubject(material.getSubject());
-        dto.setStatus(material.getStatus()); // Ye field dashboard ke liye sabse important hai
+        dto.setStatus(material.getStatus());
         dto.setFileUrl(material.getFileUrl());
         dto.setType(material.getType());
         dto.setUploadDate(material.getUploadDate());
         return dto;
+    }
+
+    @Override
+    public List<MaterialResponseDto> getMyDownloads() {
+        User user = getCurrentUser();
+        return downloadLogRepository.findByUserOrderByDownloadDateDesc(user).stream()
+                .map(log -> mapToMaterialResponse(log.getMaterial()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostResponseDto> getMyPosts() {
+        User user = getCurrentUser();
+        return postRepository.findByUserOrderByCreationDateDesc(user).stream()
+                .map(post -> {
+                    PostResponseDto dto = new PostResponseDto();
+                    dto.setId(post.getId());
+                    dto.setTitle(post.getTitle());
+                    dto.setContent(post.getContent());
+                    dto.setCategory(post.getCategory());
+                    dto.setCreationDate(post.getCreationDate());
+                    dto.setUserName(user.getName());
+                    dto.setCommentCount(post.getComments() != null ? post.getComments().size() : 0);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CommentResponseDto> getMyComments() {
+        User user = getCurrentUser();
+        return commentRepository.findByUserOrderByCreationDateDesc(user).stream()
+                .map(comment -> {
+                    CommentResponseDto dto = new CommentResponseDto();
+                    dto.setId(comment.getId());
+                    dto.setContent(comment.getContent());
+                    dto.setCreationDate(comment.getCreationDate());
+                    dto.setUserName(user.getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
