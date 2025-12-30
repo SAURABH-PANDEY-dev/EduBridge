@@ -174,6 +174,8 @@ Permanently removes a material from the database and deletes the associated file
 <hr>
 
 ### 3. Search & Filter Materials
+    
+### Test1
 Allows students to filter approved materials by metadata or text search.
 * **Endpoint:** `/api/materials/search`
 * **Method:** `GET`
@@ -186,3 +188,29 @@ Allows students to filter approved materials by metadata or text search.
 * **Success Response:**
     - **Code:** 200 OK
     - **Content:** List of `MaterialResponseDto` objects.
+
+### Test 2
+Search materials by metadata or text.
+* **Endpoint:** `/api/materials/search`
+* **Method:** `GET`
+* **Auth Required:** No (Public)
+* **Query Parameters:**
+    * `subject`: Exact subject name (e.g., `Java`)
+    * `semester`: Semester name (e.g., `Semester%201` - URL Encoded)
+    * `type`: Material type (e.g., `NOTE`, `PYQ`)
+    * `query`: Search text in Title/Description
+* **Example URL:** `/api/materials/search?subject=Java&semester=Semester%201`
+* **Success Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "title": "Java Basics",
+    "semester": "Semester 1",
+    "type": "NOTE",
+    "fileUrl": "...",
+    "status": "APPROVED"
+  }
+]
+```
+
