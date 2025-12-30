@@ -222,4 +222,47 @@ Increments the download count and redirects the user to the file URL.
 * **Auth Required:** No (Public)
 * **Response:**
   - **Code:** 302 FOUND (Redirects to Cloudinary URL)
-  - 
+
+<hr>
+<hr>
+<hr>
+
+# 💬 Discussion Forum
+
+### 1. Create Post
+* **Endpoint:** `/api/forum/posts`
+* **Method:** `POST`
+* **Auth Required:** Yes
+* **Body:**
+  ```json
+  {
+    "title": "Question Title",
+    "content": "Details...",
+    "category": "Doubt"
+  }
+  ```
+  
+### 2. Create Post
+* **Endpoint:** `/api/forum/posts`
+* **Method:** `GET`
+* **Auth Required:** Yes
+
+### 3. Add Comment
+* **Endpoint:** `/api/forum/comments`
+* **Method:** `POST`
+* **Auth Required:** Yes
+* **Body:**
+```JSON
+{
+"content": "My answer...",
+"postId": 1
+}
+```
+### 4. Get Post Comments
+* **Endpoint:** `/api/forum/posts/{postId}/comments`
+* **Method:** `GET`
+* **Auth Required:** Yes
+
+<hr>
+<hr>
+

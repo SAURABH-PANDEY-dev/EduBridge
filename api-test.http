@@ -129,3 +129,40 @@ Content-Type: application/json
 ### Test. Download Material (Should Redirect to Cloudinary)
 # Replace '15' with a valid Material ID
 GET http://localhost:8080/api/materials/15/download
+
+
+#DISCUSSION FORUM MODULE
+
+### 1. Create a Post (Need Token)
+@student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50NUBleGFtcGxlLmNvbSIsImlhdCI6MTc2NzA5MTE3MywiZXhwIjoxNzY3MTc3NTczfQ.N39vBdPSrGY8SxH2yBTB6IfHFqkvt8F7j_KkEXwToNDznURJRptyvnQ-ryLGeCQy
+POST http://localhost:8080/api/forum/posts
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "title": "Need help with Java Array Logic",
+  "content": "I am getting ArrayIndexOutOfBoundsException. Can someone explain why?",
+  "category": "Doubt"
+}
+
+> {%
+    client.global.set("post_id", response.body.id);
+%}
+
+### 2. Get All Posts (Checking Feed)
+GET http://localhost:8080/api/forum/posts
+Authorization: Bearer {{student_token}}
+
+### 3. Add Comment to the Post (Need Token & Post ID from above)
+POST http://localhost:8080/api/forum/comments
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "content": "Check your loop condition, it should be < length, not <= length.",
+  "postId": {{post_id}}
+}
+
+### 4. Get Comments of a Post
+GET http://localhost:8080/api/forum/posts/{{post_id}}/comments
+Authorization: Bearer {{student_token}}
