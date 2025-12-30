@@ -241,11 +241,14 @@ Increments the download count and redirects the user to the file URL.
     "category": "Doubt"
   }
   ```
-  
+
+<hr>
+
 ### 2. Create Post
 * **Endpoint:** `/api/forum/posts`
 * **Method:** `GET`
 * **Auth Required:** Yes
+<hr>
 
 ### 3. Add Comment
 * **Endpoint:** `/api/forum/comments`
@@ -258,6 +261,9 @@ Increments the download count and redirects the user to the file URL.
 "postId": 1
 }
 ```
+
+<hr>
+
 ### 4. Get Post Comments
 * **Endpoint:** `/api/forum/posts/{postId}/comments`
 * **Method:** `GET`
@@ -265,4 +271,3 @@ Increments the download count and redirects the user to the file URL.
 
 <hr>
 <hr>
-
