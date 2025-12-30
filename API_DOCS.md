@@ -271,3 +271,37 @@ Increments the download count and redirects the user to the file URL.
 
 <hr>
 <hr>
+<hr>
+
+### 👤 User Profile & Dashboard
+
+### 1. Get My Profile
+Fetch current logged-in user's details.
+* **URL:** `/api/users/profile`
+* **Method:** `GET`
+* **Auth:** Yes
+
+<hr>
+
+### 2. Update Profile
+Update name or university.
+* **URL:** `/api/users/profile`
+* **Method:** `PUT`
+* **Auth:** Yes
+* **Body:**
+```json
+{
+  "name": "New Name",
+  "university": "New University"
+}
+```
+<hr>
+
+### 3. Get My Uploads
+Fetch all materials uploaded by the user with their status (PENDING/APPROVED).
+* **Endpoint:** `/api/users/uploads`
+* **Method:** `GET`
+* **Auth:** `Yes`
+
+<hr>
+<hr>

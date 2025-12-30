@@ -1,11 +1,14 @@
+@admin_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwOTI1NTIsImV4cCI6MTc2NzE3ODk1Mn0.XrXG2EDvga3FoMddeVqPFEbnh8xBWAExLp7S2kB9PcuZciQSNlrHKX07qXTh298R
+@student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJyb2NreWJoYWk4OTA4QGdtYWlsLmNvbSIsImlhdCI6MTc2NzEwNDk2OSwiZXhwIjoxNzY3MTkxMzY5fQ.mB_T9Gs1TYBXGWZ70ZuymdJCMxDxQknfYvtVLcsi60RGVF9ePis0cK-MFZ6MUTrO
+
 ### Test 1: Register a new Student
 POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "Test Student",
-  "email": "student5@example.com",
-  "password": "password123",
+  "name": "Rocky Bhai",
+  "email": "rockybhai8908@gmail.com",
+  "password": "rocky",
   "role": "STUDENT"
 }
 
@@ -22,8 +25,8 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "student5@example.com",
-  "password": "password123"
+  "email": "rockybhai8908@gmail.com",
+  "password": "rocky"
 }
 
 ### Test 3 : Register User
@@ -134,15 +137,14 @@ GET http://localhost:8080/api/materials/15/download
 #DISCUSSION FORUM MODULE
 
 ### 1. Create a Post (Need Token)
-@student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdHVkZW50NUBleGFtcGxlLmNvbSIsImlhdCI6MTc2NzA5MTE3MywiZXhwIjoxNzY3MTc3NTczfQ.N39vBdPSrGY8SxH2yBTB6IfHFqkvt8F7j_KkEXwToNDznURJRptyvnQ-ryLGeCQy
 POST http://localhost:8080/api/forum/posts
 Authorization: Bearer {{student_token}}
 Content-Type: application/json
 
 {
-  "title": "Need help with Java Array Logic",
-  "content": "I am getting ArrayIndexOutOfBoundsException. Can someone explain why?",
-  "category": "Doubt"
+  "title": "How you all doing",
+  "content": "I want to connect to you all lets connect and share our current experiences",
+  "category": "Community Post"
 }
 
 > {%
@@ -155,14 +157,35 @@ Authorization: Bearer {{student_token}}
 
 ### 3. Add Comment to the Post (Need Token & Post ID from above)
 POST http://localhost:8080/api/forum/comments
-Authorization: Bearer {{student_token}}
+Authorization: Bearer {{admin_token}}
 Content-Type: application/json
 
 {
-  "content": "Check your loop condition, it should be < length, not <= length.",
+  "content": "I am doing well brother",
   "postId": {{post_id}}
 }
 
 ### 4. Get Comments of a Post
 GET http://localhost:8080/api/forum/posts/{{post_id}}/comments
+Authorization: Bearer {{student_token}}
+
+##==========================================
+# USER DASHBOARD & PROFILE
+# ==========================================
+
+### 1. Get My Profile (Check current details)
+GET http://localhost:8080/api/users/profile
+Authorization: Bearer {{student_token}}
+
+### 2. Update Profile (Add University)
+PUT http://localhost:8080/api/users/profile
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "university": "MGKVP"
+}
+
+### 3. Get My Uploads (Check Pending/Approved status)
+GET http://localhost:8080/api/users/uploads
 Authorization: Bearer {{student_token}}

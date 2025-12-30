@@ -37,4 +37,5 @@ public class User {
     private String resetPasswordToken;
     // Stores the time when the reset token will expire
     private java.time.LocalDateTime resetPasswordTokenExpiry;
+    private String university;
 }

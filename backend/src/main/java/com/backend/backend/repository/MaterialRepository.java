@@ -1,6 +1,7 @@
 package com.backend.backend.repository;
 
 import com.backend.backend.entity.Material;
+import com.backend.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +45,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
             @Param("type") String type,
             @Param("query") String query
     );
+    // Find all materials uploaded by a specific user
+    List<Material> findByUploadedBy(User user);
 }

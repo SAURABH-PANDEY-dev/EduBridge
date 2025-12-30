@@ -14,6 +14,21 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import com.backend.backend.dto.ResetPasswordDto;
 
+import com.backend.backend.dto.MaterialResponseDto;
+import com.backend.backend.dto.UserDto;
+import com.backend.backend.dto.UserResponseDto;
+import com.backend.backend.entity.Material;
+import com.backend.backend.entity.User;
+import com.backend.backend.repository.MaterialRepository;
+import com.backend.backend.repository.UserRepository;
+import com.backend.backend.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 /**
  * Implementation of UserService.
  * Contains the business logic for changing the user's password securely.
@@ -25,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private JavaMailSender mailSender;
+    private final MaterialRepository materialRepository;
 
     @Override
     public String changePassword(ChangePasswordDto changePasswordDto) {
@@ -114,5 +130,62 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return "Password successfully reset! You can now login.";
+    }
+
+    // Helper to get logged-in user
+    private User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public UserResponseDto getMyProfile() {
+        User user = getCurrentUser();
+        return mapToUserResponse(user);
+    }
+
+    @Override
+    public UserResponseDto updateMyProfile(UserDto userDto) {
+        User user = getCurrentUser();
+
+        // Sirf wahi fields update karein jo allowed hain
+        if (userDto.getName() != null) user.setName(userDto.getName());
+        if (userDto.getUniversity() != null) user.setUniversity(userDto.getUniversity());
+
+        User updatedUser = userRepository.save(user);
+        return mapToUserResponse(updatedUser);
+    }
+
+    @Override
+    public List<MaterialResponseDto> getMyUploads() {
+        User user = getCurrentUser();
+        // Repository mein ye method banana padega (Step 3 mein)
+        List<Material> uploads = materialRepository.findByUploadedBy(user);
+
+        return uploads.stream().map(this::mapToMaterialResponse).collect(Collectors.toList());
+    }
+
+    // --- Mappers ---
+    private UserResponseDto mapToUserResponse(User user) {
+        UserResponseDto dto = new UserResponseDto();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setUniversity(user.getUniversity());
+        dto.setRole(user.getRole().name());
+        return dto;
+    }
+
+    private MaterialResponseDto mapToMaterialResponse(Material material) {
+        MaterialResponseDto dto = new MaterialResponseDto();
+        dto.setId(material.getId());
+        dto.setTitle(material.getTitle());
+        dto.setSubject(material.getSubject());
+        dto.setStatus(material.getStatus()); // Ye field dashboard ke liye sabse important hai
+        dto.setFileUrl(material.getFileUrl());
+        dto.setType(material.getType());
+        dto.setUploadDate(material.getUploadDate());
+        return dto;
     }
 }

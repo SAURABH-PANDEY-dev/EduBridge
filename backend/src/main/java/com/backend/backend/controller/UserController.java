@@ -11,6 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.backend.dto.ForgotPasswordDto;
 import com.backend.backend.dto.ResetPasswordDto;
+import com.backend.backend.dto.MaterialResponseDto;
+import com.backend.backend.dto.UserDto;
+import com.backend.backend.dto.UserResponseDto;
+import com.backend.backend.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST Controller for User Profile operations.
@@ -49,5 +59,23 @@ public class UserController {
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         String response = userService.resetPassword(resetPasswordDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //  Get My Profile
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponseDto> getMyProfile() {
+        return new ResponseEntity<>(userService.getMyProfile(), HttpStatus.OK);
+    }
+
+    //Update My Profile (Name/University)
+    @PutMapping("/profile")
+    public ResponseEntity<UserResponseDto> updateProfile(@RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.updateMyProfile(userDto), HttpStatus.OK);
+    }
+
+    //Get My Uploads (Dashboard)
+    @GetMapping("/uploads")
+    public ResponseEntity<List<MaterialResponseDto>> getMyUploads() {
+        return new ResponseEntity<>(userService.getMyUploads(), HttpStatus.OK);
     }
 }
