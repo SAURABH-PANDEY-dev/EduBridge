@@ -2,6 +2,9 @@ package com.backend.backend.repository;
 
 import com.backend.backend.entity.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 /**
@@ -26,4 +29,19 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
      * @return List of matching materials.
      */
     List<Material> findByStatusAndType(String status, String type);
+
+    // Search query to filter materials dynamically
+    // It checks if a parameter is NULL; if so, it ignores that filter.
+    @Query("SELECT m FROM Material m WHERE m.status = 'APPROVED' " +
+            "AND (:subject IS NULL OR m.subject = :subject) " +
+            "AND (:semester IS NULL OR m.semester = :semester) " +
+            "AND (:type IS NULL OR m.type = :type) " +
+            "AND (:query IS NULL OR LOWER(m.title) LIKE LOWER(CONCAT('%', :query, '%')) " +
+            "OR LOWER(m.description) LIKE LOWER(CONCAT('%', :query, '%')))")
+    List<Material> searchMaterials(
+            @Param("subject") String subject,
+            @Param("semester") String semester,
+            @Param("type") String type,
+            @Param("query") String query
+    );
 }

@@ -170,3 +170,19 @@ Permanently removes a material from the database and deletes the associated file
   - **Code:** 200 OK
   - **Content:** `"Material and associated file deleted successfully."`
 <hr>
+<hr>
+<hr>
+
+### 3. Search & Filter Materials
+Allows students to filter approved materials by metadata or text search.
+* **Endpoint:** `/api/materials/search`
+* **Method:** `GET`
+* **Auth Required:** No (Public)
+* **Query Parameters (All Optional):**
+    * `subject`: Exact match (e.g., "Java")
+    * `semester`: Exact match (e.g., "Semester 1")
+    * `type`: Exact match (e.g., "NOTE", "PYQ")
+    * `query`: Partial text search in Title or Description
+* **Success Response:**
+    - **Code:** 200 OK
+    - **Content:** List of `MaterialResponseDto` objects.

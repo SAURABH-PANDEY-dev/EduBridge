@@ -111,4 +111,14 @@ public class MaterialServiceImpl implements MaterialService {
         // 3. Delete from Database
         materialRepository.delete(material);
     }
+    @Override
+    public List<MaterialResponseDto> searchMaterials(String subject, String semester, String type, String query) {
+        // Fetch filtered data from the database
+        List<Material> materials = materialRepository.searchMaterials(subject, semester, type, query);
+
+        // Convert the entity list to DTO list
+        return materials.stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 }

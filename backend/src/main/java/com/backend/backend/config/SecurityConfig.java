@@ -4,6 +4,7 @@ import com.backend.backend.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,6 +47,8 @@ public class SecurityConfig {
                     authorize.requestMatchers("/api/auth/**").permitAll();
                     authorize.requestMatchers("/api/users/forgot-password").permitAll();
                     authorize.requestMatchers("/api/users/reset-password").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/materials/search").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
                     // Lock down everything else - requires authentication
                     authorize.anyRequest().authenticated();
                 });

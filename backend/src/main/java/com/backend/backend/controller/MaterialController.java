@@ -70,4 +70,20 @@ public class MaterialController {
         materialService.deleteMaterial(id);
         return new ResponseEntity<>("Material and associated file deleted successfully.", HttpStatus.OK);
     }
+
+    /**
+     * Endpoint to Search and Filter materials.
+     * URL: GET http://localhost:8080/api/materials/search?subject=Java&semester=Semester 1
+     * All parameters are optional.
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<MaterialResponseDto>> searchMaterials(
+            @RequestParam(required = false) String subject,
+            @RequestParam(required = false) String semester,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String query) {
+
+        List<MaterialResponseDto> materials = materialService.searchMaterials(subject, semester, type, query);
+        return new ResponseEntity<>(materials, HttpStatus.OK);
+    }
 }

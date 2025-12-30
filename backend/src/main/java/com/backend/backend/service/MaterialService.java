@@ -34,4 +34,6 @@ public interface MaterialService {
     // Approve a material
     void approveMaterial(Long id);
     void deleteMaterial(Long id);
+    // Search materials with filters
+    List<MaterialResponseDto> searchMaterials(String subject, String semester, String type, String query);
 }
