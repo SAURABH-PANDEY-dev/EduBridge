@@ -213,4 +213,13 @@ Search materials by metadata or text.
   }
 ]
 ```
+<hr>
 
+### 4. Download Material
+Increments the download count and redirects the user to the file URL.
+* **Endpoint:** `/api/materials/{id}/download`
+* **Method:** `GET`
+* **Auth Required:** No (Public)
+* **Response:**
+  - **Code:** 302 FOUND (Redirects to Cloudinary URL)
+  - 

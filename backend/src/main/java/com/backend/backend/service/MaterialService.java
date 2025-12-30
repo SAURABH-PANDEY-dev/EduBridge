@@ -36,4 +36,6 @@ public interface MaterialService {
     void deleteMaterial(Long id);
     // Search materials with filters
     List<MaterialResponseDto> searchMaterials(String subject, String semester, String type, String query);
+    // Increment count and return the actual file URL
+    String downloadMaterial(Long id);
 }

@@ -121,4 +121,15 @@ public class MaterialServiceImpl implements MaterialService {
                 .map(this::mapToDto)
                 .toList();
     }
+
+    @Override
+    public String downloadMaterial(Long id) {
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
+        // 1. Count++
+        material.setDownloadCount(material.getDownloadCount() + 1);
+        materialRepository.save(material);
+        // 2.URL to return
+        return material.getFileUrl();
+    }
 }

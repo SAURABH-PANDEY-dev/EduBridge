@@ -68,7 +68,7 @@ Content-Type: application/json
 
 ### Test 7: Upload Material (Multipart)
 POST http://localhost:8080/api/materials/upload
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwMzM1NzQsImV4cCI6MTc2NzExOTk3NH0.s-Eb2nAM9lQQWFf31jFGBZ7S6O3rits0xTTxOrxakhJS8koMAiNTELvyGPBXn73K
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwODQ1MjksImV4cCI6MTc2NzE3MDkyOX0.FhKqVOwdlT0poSuYcHFXOTJCWWtu486bKmOKU1Dgi2J3H795zMEFSWvSHcHnGWl8
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -88,9 +88,9 @@ Content-Disposition: form-data; name="type"
 
 NOTE
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="new_test.pdf"
+Content-Disposition: form-data; name="file"; filename="sem5 timetable.pdf"
 
-< ./test.pdf
+< ./sem5 timetable.pdf
 --WebAppBoundary--
 
 ### Test 8 : Get list of pending notes
@@ -124,3 +124,8 @@ Content-Type: application/json
 ### 4. Combined Filter (Subject + Semester + Type)
 GET http://localhost:8080/api/materials/search?subject=Java&semester=Semester 1&type=NOTE
 Content-Type: application/json
+
+
+### Test. Download Material (Should Redirect to Cloudinary)
+# Replace '15' with a valid Material ID
+GET http://localhost:8080/api/materials/15/download

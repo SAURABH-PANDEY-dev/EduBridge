@@ -5,6 +5,7 @@ import com.backend.backend.dto.MaterialResponseDto;
 import com.backend.backend.entity.Material;
 import com.backend.backend.service.MaterialService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -85,5 +86,17 @@ public class MaterialController {
 
         List<MaterialResponseDto> materials = materialService.searchMaterials(subject, semester, type, query);
         return new ResponseEntity<>(materials, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint to Download file (Increments count + Redirects to Cloudinary).
+     * URL: GET http://localhost:8080/api/materials/{id}/download
+     */
+    @GetMapping("/{id}/download")
+    public ResponseEntity<Void> downloadMaterial(@PathVariable Long id) {
+        String fileUrl = materialService.downloadMaterial(id);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, fileUrl)
+                .build();
     }
 }

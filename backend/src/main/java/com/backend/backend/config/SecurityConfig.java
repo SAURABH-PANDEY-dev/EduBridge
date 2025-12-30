@@ -49,6 +49,7 @@ public class SecurityConfig {
                     authorize.requestMatchers("/api/users/reset-password").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials/search").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
                     // Lock down everything else - requires authentication
                     authorize.anyRequest().authenticated();
                 });
