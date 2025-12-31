@@ -37,8 +37,8 @@ public class MaterialController {
      * * URL: GET http://localhost:8080/api/materials
      */
     @GetMapping
-    public ResponseEntity<List<Material>> getAllApprovedMaterials() {
-        List<Material> materials = materialService.getAllApprovedMaterials();
+    public ResponseEntity<List<MaterialResponseDto>> getAllApprovedMaterials() {
+        List<MaterialResponseDto> materials = materialService.getAllApprovedMaterials();
         return new ResponseEntity<>(materials, HttpStatus.OK);
     }
 
@@ -98,5 +98,13 @@ public class MaterialController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.LOCATION, fileUrl)
                 .build();
+    }
+
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<com.backend.backend.dto.ReviewDto> addReview(
+            @PathVariable Long id,
+            @RequestBody com.backend.backend.dto.ReviewDto reviewDto) {
+        com.backend.backend.dto.ReviewDto savedReview = materialService.addReview(id, reviewDto);
+        return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
     }
 }

@@ -3,6 +3,7 @@ package com.backend.backend.service;
 import com.backend.backend.dto.MaterialDto;
 import com.backend.backend.dto.MaterialResponseDto;
 import com.backend.backend.entity.Material;
+import com.backend.backend.entity.Review;
 import com.backend.backend.entity.User;
 import com.backend.backend.repository.MaterialRepository;
 import com.backend.backend.repository.UserRepository;
@@ -14,8 +15,9 @@ import org.springframework.stereotype.Service;
 import com.backend.backend.entity.DownloadLog;
 import com.backend.backend.repository.DownloadLogRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-
+import com.backend.backend.repository.ReviewRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +27,7 @@ public class MaterialServiceImpl implements MaterialService {
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
     private final DownloadLogRepository downloadLogRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public MaterialResponseDto uploadMaterial(MaterialDto materialDto) {
@@ -72,14 +75,45 @@ public class MaterialServiceImpl implements MaterialService {
         responseDto.setFileUrl(material.getFileUrl());
         responseDto.setStatus(material.getStatus());
         responseDto.setUploadDate(material.getUploadDate());
-        responseDto.setUploadedBy(material.getUploadedBy().getName());
+
+        if (material.getUploadedBy() != null) {
+            responseDto.setUploadedBy(material.getUploadedBy().getName());
+        }
+
+        // Map Rating and Review List
+        responseDto.setAverageRating(material.getAverageRating());
+        responseDto.setTotalReviews(material.getTotalReviews());
+
+        if (material.getReviews() != null) {
+            List<com.backend.backend.dto.ReviewDto> reviewDtos = material.getReviews().stream()
+                    .map(review -> {
+                        com.backend.backend.dto.ReviewDto dto = new com.backend.backend.dto.ReviewDto();
+                        dto.setId(review.getId());
+                        dto.setRating(review.getRating());
+                        dto.setComment(review.getComment());
+                        if (review.getUser() != null) {
+                            dto.setUserName(review.getUser().getName());
+                        } else {
+                            dto.setUserName("Anonymous");
+                        }
+
+                        dto.setCreatedAt(review.getCreatedAt());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+            responseDto.setReviews(reviewDtos);
+        }
+
         return responseDto;
     }
 
+
     @Override
-    public List<Material> getAllApprovedMaterials() {
-        // Only return materials that have been approved by an Admin
-        return materialRepository.findByStatus("APPROVED");
+    public List<MaterialResponseDto> getAllApprovedMaterials() {
+        List<Material> materials = materialRepository.findByStatus("APPROVED");
+        return materials.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -155,5 +189,41 @@ public class MaterialServiceImpl implements MaterialService {
 
         return material.getFileUrl();
     }
+    // Helper method to get the currently logged-in user
+    private User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
+    @Override
+    public com.backend.backend.dto.ReviewDto addReview(Long materialId, com.backend.backend.dto.ReviewDto reviewDto) {
+        User user = getCurrentUser(); // Reuse existing helper
+
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
+
+        // Check for duplicate review
+        if (reviewRepository.findByUserAndMaterial(user, material).isPresent()) {
+            throw new RuntimeException("You have already reviewed this material!");
+        }
+
+        Review review = new Review();
+        review.setRating(reviewDto.getRating());
+        review.setComment(reviewDto.getComment());
+        review.setUser(user);
+        review.setMaterial(material);
+
+        Review savedReview = reviewRepository.save(review);
+
+        // Map back to DTO
+        com.backend.backend.dto.ReviewDto response = new com.backend.backend.dto.ReviewDto();
+        response.setId(savedReview.getId());
+        response.setRating(savedReview.getRating());
+        response.setComment(savedReview.getComment());
+        response.setUserName(user.getName());
+        response.setCreatedAt(savedReview.getCreatedAt());
+
+        return response;
+    }
 }

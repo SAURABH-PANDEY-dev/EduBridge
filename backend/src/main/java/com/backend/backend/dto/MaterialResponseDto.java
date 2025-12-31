@@ -2,7 +2,7 @@ package com.backend.backend.dto;
 
 import lombok.Data;
 import java.time.LocalDateTime;
-
+import java.util.List;
 /**
  * DTO for sending Material data to the client.
  * Hides sensitive user information like passwords.
@@ -18,4 +18,7 @@ public class MaterialResponseDto {
     private String status;
     private LocalDateTime uploadDate;
     private String uploadedBy;
+    private Double averageRating;
+    private Integer totalReviews;
+    private List<ReviewDto> reviews;
 }

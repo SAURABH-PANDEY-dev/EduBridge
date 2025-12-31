@@ -53,4 +53,31 @@ public class Material {
     @JoinColumn(name = "user_id", nullable = false)
     private User uploadedBy;
 
+    // Relationship: One Material has Many Reviews
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Review> reviews;
+
+    /**
+     * Virtual Getter for Average Rating.
+     * Included automatically in JSON response as "averageRating".
+     */
+    public Double getAverageRating() {
+        if (reviews == null || reviews.isEmpty()) {
+            return 0.0;
+        }
+        double avg = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
+        // Round to 1 decimal place (e.g., 4.5)
+        return Math.round(avg * 10.0) / 10.0;
+    }
+
+    /**
+     * Virtual Getter for Total Review Count.
+     * Included automatically in JSON response as "totalReviews".
+     */
+    public Integer getTotalReviews() {
+        return (reviews == null) ? 0 : reviews.size();
+    }
 }

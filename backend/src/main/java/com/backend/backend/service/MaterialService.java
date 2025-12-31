@@ -29,7 +29,7 @@ public interface MaterialService {
      *
      * @return List of approved materials.
      */
-    List<Material> getAllApprovedMaterials();
+    List<MaterialResponseDto> getAllApprovedMaterials();
     List<MaterialResponseDto> getPendingMaterials();
     // Approve a material
     void approveMaterial(Long id);
@@ -38,4 +38,6 @@ public interface MaterialService {
     List<MaterialResponseDto> searchMaterials(String subject, String semester, String type, String query);
     // Increment count and return the actual file URL
     String downloadMaterial(Long id);
+    // Add a review to a material
+    com.backend.backend.dto.ReviewDto addReview(Long materialId, com.backend.backend.dto.ReviewDto reviewDto);
 }

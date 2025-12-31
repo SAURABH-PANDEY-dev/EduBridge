@@ -224,6 +224,32 @@ Increments the download count and redirects the user to the file URL.
   - **Code:** 302 FOUND (Redirects to Cloudinary URL)
 
 <hr>
+
+### 5. Add Review
+Allows a student to rate (1-5) and review a material.
+* **Endpoint:** `/api/materials/{id}/reviews`
+* **Method:** `POST`
+* **Auth Required:** Yes (Role: STUDENT)
+* **Body:**
+```json
+{
+  "rating": 5,
+  "comment": "Notes acche hain bhai!"
+}
+```
+
+### Success Response (201 Created):
+```JSON
+{
+"id": 1,
+"rating": 5,
+"comment": "Notes acche hain bhai!",
+"userName": "Rocky Bhai",
+"createdAt": "2025-12-31T12:00:00"
+}
+```
+
+<hr>
 <hr>
 <hr>
 
