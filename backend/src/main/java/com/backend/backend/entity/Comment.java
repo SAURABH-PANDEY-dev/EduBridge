@@ -30,4 +30,6 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    // 👇 NEW FIELD (True if the post owner marks this as the Best Answer)
+    private boolean isAccepted = false;
 }

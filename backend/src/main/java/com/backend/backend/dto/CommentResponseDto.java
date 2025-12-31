@@ -12,4 +12,6 @@ public class CommentResponseDto {
     // User details
     private String userName;
     private Long userId;
+
+    private boolean isAccepted;
 }

@@ -296,6 +296,73 @@ Allows a student to rate (1-5) and review a material.
 * **Auth Required:** Yes
 
 <hr>
+
+### FORUM & COMMUNITY MODULE (Part 2 - Advanced Features)
+
+### 1. Vote on a Post (Upvote/Downvote)
+* **Endpoint:** `/api/forum/posts/{postId}/vote`
+* **Method:** `POST`
+* **Description:** Allows a user to upvote or downvote a post. Toggles the vote if clicked again (e.g., Upvote -> Remove Upvote).
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+* **Path Parameters:**
+  * `postId`: ID of the post to vote on.
+* **Request Body (JSON):**
+    ```json
+    {
+      "voteType": "UPVOTE"  // OR "DOWNVOTE"
+    }
+    ```
+* **Response (200 OK):**
+    ```text
+    Vote recorded successfully.
+    ```
+
+---
+
+### 2. Search and Filter Posts
+* **Endpoint:** `/api/forum/search`
+* **Method:** `GET`
+* **Description:** Search posts by title/content keyword OR filter by category.
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+* **Query Parameters:**
+  * `query`: (Optional) Text to search in Title or Content (e.g., `?query=loops`).
+  * `category`: (Optional) Filter by category name (e.g., `?category=Doubt`).
+* **Response (200 OK):**
+    ```json
+    [
+      {
+        "id": 5,
+        "title": "Java Loops doubt",
+        "content": "Difference between for and while?",
+        "category": "Doubt",
+        "userName": "Rocky Bhai",
+        "voteCount": 10,
+        "viewCount": 5,
+        "commentCount": 3,
+        "creationDate": "2025-12-31T10:00:00"
+      }
+    ]
+    ```
+
+---
+
+### 3. Mark Comment as Best Answer (Solved)
+* **Endpoint:** `/api/forum/posts/{postId}/comments/{commentId}/accept`
+* **Method:** `PUT`
+* **Description:** Marks a specific comment as the "Accepted Answer". Only the **Post Owner** can perform this action.
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+* **Path Parameters:**
+  * `postId`: ID of the post.
+  * `commentId`: ID of the comment to mark as accepted.
+* **Response (200 OK):**
+    ```text
+    Answer marked as accepted!
+    ```
+
+<hr>
 <hr>
 <hr>
 
@@ -359,4 +426,3 @@ Fetch all comments made by the user on various posts.
 <hr>
 <hr>
 <hr>
-

@@ -18,4 +18,13 @@ public interface ForumService {
 
     // Get all comments for a specific post
     List<CommentResponseDto> getCommentsByPost(Long postId);
+
+    // Vote on a Post (Upvote/Downvote)
+    void votePost(Long postId, com.backend.backend.dto.VoteDto voteDto);
+
+    // Search and Filter Posts
+    java.util.List<com.backend.backend.dto.PostResponseDto> searchPosts(String query, String category);
+
+    // Mark a Comment as "Best Answer" (Solved)
+    void markCommentAsAccepted(Long postId, Long commentId);
 }

@@ -42,4 +42,36 @@ public class ForumController {
     public ResponseEntity<List<CommentResponseDto>> getPostComments(@PathVariable Long postId) {
         return new ResponseEntity<>(forumService.getCommentsByPost(postId), HttpStatus.OK);
     }
+
+    // 5. Vote on a Post (Upvote/Downvote)
+    // URL: POST /api/forum/posts/{postId}/vote
+    @PostMapping("/posts/{postId}/vote")
+    public ResponseEntity<String> votePost(
+            @PathVariable Long postId,
+            @RequestBody com.backend.backend.dto.VoteDto voteDto) {
+
+        forumService.votePost(postId, voteDto);
+        return new ResponseEntity<>("Vote recorded successfully.", HttpStatus.OK);
+    }
+
+    // 6. Search and Filter Posts
+    // URL: GET /api/forum/search?query=java&category=Doubt
+    @GetMapping("/search")
+    public ResponseEntity<List<PostResponseDto>> searchPosts(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String category) {
+
+        return new ResponseEntity<>(forumService.searchPosts(query, category), HttpStatus.OK);
+    }
+
+    // 7. Mark Comment as "Best Answer" (Accepted)
+    // URL: PUT /api/forum/posts/{postId}/comments/{commentId}/accept
+    @PutMapping("/posts/{postId}/comments/{commentId}/accept")
+    public ResponseEntity<String> markAsAccepted(
+            @PathVariable Long postId,
+            @PathVariable Long commentId) {
+
+        forumService.markCommentAsAccepted(postId, commentId);
+        return new ResponseEntity<>("Answer marked as accepted!", HttpStatus.OK);
+    }
 }

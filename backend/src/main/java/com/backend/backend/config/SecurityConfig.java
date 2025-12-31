@@ -50,6 +50,8 @@ public class SecurityConfig {
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials/search").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();
+//                    authorize.requestMatchers("/api/admin/**").hasRole("ADMIN");
                     // Lock down everything else - requires authentication
                     authorize.anyRequest().authenticated();
                 });

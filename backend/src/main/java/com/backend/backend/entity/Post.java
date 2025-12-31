@@ -36,4 +36,9 @@ public class Post {
     // CascadeType.ALL means: Post delete means comments delete
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+    private Integer viewCount = 0; // To track how many people viewed it
+    private Integer voteCount = 0; // Stores total score (Upvotes - Downvotes)
+    // Relationship with Votes (One Post -> Many Votes)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Vote> votes;
 }

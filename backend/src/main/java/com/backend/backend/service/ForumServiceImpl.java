@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class ForumServiceImpl implements ForumService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final com.backend.backend.repository.VoteRepository voteRepository;
 
     // Helper to get currently logged-in user
     private User getCurrentUser() {
@@ -84,9 +86,15 @@ public class ForumServiceImpl implements ForumService {
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());
         dto.setCategory(post.getCategory());
+        dto.setVoteCount(post.getVoteCount());
+        dto.setViewCount(post.getViewCount());
         dto.setCreationDate(post.getCreationDate());
         dto.setUserName(post.getUser().getName());
         dto.setUserId(post.getUser().getId());
+
+         if (post.getUser() != null) {
+            dto.setUserName(post.getUser().getName());
+        }
         // Handling null comments list safely
         dto.setCommentCount(post.getComments() != null ? post.getComments().size() : 0);
         return dto;
@@ -100,5 +108,87 @@ public class ForumServiceImpl implements ForumService {
         dto.setUserName(comment.getUser().getName());
         dto.setUserId(comment.getUser().getId());
         return dto;
+    }
+    @Override
+    @Transactional
+    public void votePost(Long postId, com.backend.backend.dto.VoteDto voteDto) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User currentUser = getCurrentUser(); // Helper method reuse
+
+        // Check if vote already exists
+        java.util.Optional<com.backend.backend.entity.Vote> existingVoteOpt =
+                voteRepository.findByPostAndUser(post, currentUser);
+
+        if (existingVoteOpt.isPresent()) {
+            com.backend.backend.entity.Vote vote = existingVoteOpt.get();
+            if (vote.getVoteType().equals(voteDto.getVoteType())) {
+                voteRepository.delete(vote);
+                // Update count
+                if (voteDto.getVoteType() == com.backend.backend.entity.VoteType.UPVOTE) {
+                    post.setVoteCount(post.getVoteCount() - 1);
+                } else {
+                    post.setVoteCount(post.getVoteCount() + 1);
+                }
+            } else {
+                vote.setVoteType(voteDto.getVoteType());
+                voteRepository.save(vote);
+                // Update count logic (+2 or -2 swing)
+                if (voteDto.getVoteType() == com.backend.backend.entity.VoteType.UPVOTE) {
+                    post.setVoteCount(post.getVoteCount() + 2);
+                } else {
+                    post.setVoteCount(post.getVoteCount() - 2);
+                }
+            }
+        } else {
+            // New Vote creation
+            com.backend.backend.entity.Vote newVote = com.backend.backend.entity.Vote.builder()
+                    .post(post)
+                    .user(currentUser)
+                    .voteType(voteDto.getVoteType())
+                    .build();
+            voteRepository.save(newVote);
+
+            // Update count
+            if (voteDto.getVoteType() == com.backend.backend.entity.VoteType.UPVOTE) {
+                post.setVoteCount(post.getVoteCount() + 1);
+            } else {
+                post.setVoteCount(post.getVoteCount() - 1);
+            }
+        }
+        postRepository.save(post);
+    }
+    @Override
+    public List<PostResponseDto> searchPosts(String query, String category) {
+        List<Post> posts;
+
+        if (query != null && !query.isEmpty()) {
+            posts = postRepository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(query, query);
+        } else if (category != null && !category.isEmpty()) {
+            posts = postRepository.findByCategory(category);
+        } else {
+            posts = postRepository.findAll();
+        }
+
+        return posts.stream().map(this::mapToPostResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public void markCommentAsAccepted(Long postId, Long commentId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User currentUser = getCurrentUser();
+
+        // Security Check: Only Post Owner can mark answer as accepted
+        if (!post.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Only the author of the post can mark an answer as accepted.");
+        }
+
+        com.backend.backend.entity.Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        comment.setAccepted(true);
+        commentRepository.save(comment);
     }
 }
