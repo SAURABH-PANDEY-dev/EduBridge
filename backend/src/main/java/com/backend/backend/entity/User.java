@@ -38,4 +38,6 @@ public class User {
     // Stores the time when the reset token will expire
     private java.time.LocalDateTime resetPasswordTokenExpiry;
     private String university;
+    @Column(nullable = false)
+    private boolean isBlocked = false; // True = User Blocked, False = Active
 }

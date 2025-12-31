@@ -64,6 +64,14 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
+        String email = authentication.getName();
+
+        com.backend.backend.entity.User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found with email: " + email));
+
+        if (user.isBlocked()) {
+            throw new org.springframework.security.authentication.LockedException("Your account is blocked by Admin.");
+        }
         // 2. Set the authentication object in the Security Context
         // This tells Spring Security that the current user is now logged in.
         SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -446,3 +446,45 @@ Fetch all comments made by the user on various posts.
     ```
 <hr>
 
+### 2. Get All Users List
+* **Endpoint:** `/api/admin/users`
+* **Method:** `GET`
+* **Description:** Retrieves a list of all registered users with their roles and block status.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Response (200 OK):**
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "Rocky Bhai",
+        "email": "rocky@example.com",
+        "role": "STUDENT",
+        "isBlocked": true,
+        "createdAt": "2025-01-01T10:00:00"
+      },
+      {
+        "id": 2,
+        "name": "Saurabh Admin",
+        "email": "admin@example.com",
+        "role": "ADMIN",
+        "isBlocked": false,
+        "createdAt": "2025-01-01T12:00:00"
+      }
+    ]
+    ```
+
+### 3. Block / Unblock User
+* **Endpoint:** `/api/admin/users/{userId}/toggle-block`
+* **Method:** `PUT`
+* **Description:** Toggles the block status of a user. If blocked, they cannot login. If active, they get blocked.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Path Parameters:**
+  * `userId`: ID of the user to block/unblock.
+* **Response (200 OK):**
+    ```text
+    User block status updated successfully.
+    ```
+  
+<hr>

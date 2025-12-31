@@ -24,4 +24,25 @@ public class AdminServiceImpl implements AdminService {
                 .totalPosts(postRepository.count())
                 .build();
     }
+
+    @Override
+    public java.util.List<com.backend.backend.dto.UserResponseDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> com.backend.backend.dto.UserResponseDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .role(user.getRole().name())
+                        .isBlocked(user.isBlocked())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+    }
+    @Override
+    public void toggleBlockUser(Long userId) {
+        com.backend.backend.entity.User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setBlocked(!user.isBlocked());
+        userRepository.save(user);
+    }
 }
