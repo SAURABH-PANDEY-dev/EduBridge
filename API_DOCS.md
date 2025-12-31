@@ -310,7 +310,7 @@ Allows a student to rate (1-5) and review a material.
 * **Request Body (JSON):**
     ```json
     {
-      "voteType": "UPVOTE"  // OR "DOWNVOTE"
+      "voteType": "UPVOTE" 
     }
     ```
 * **Response (200 OK):**
@@ -426,3 +426,23 @@ Fetch all comments made by the user on various posts.
 <hr>
 <hr>
 <hr>
+
+## ADMIN MODULE
+
+### 1. Get Dashboard Statistics
+* **Endpoint:** `/api/admin/stats`
+* **Method:** `GET`
+* **Description:** Retrieves total counts of users, materials, pending requests, and forum posts for the admin dashboard.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Response (200 OK):**
+    ```json
+    {
+      "totalUsers": 120,
+      "totalMaterials": 45,
+      "pendingMaterials": 5,
+      "totalPosts": 30
+    }
+    ```
+<hr>
+

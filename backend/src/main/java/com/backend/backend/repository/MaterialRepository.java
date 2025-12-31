@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.backend.backend.entity.Material;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
 import java.util.List;
 
 /**
@@ -31,6 +35,7 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
      */
     List<Material> findByStatusAndType(String status, String type);
 
+    long countByStatus(String status);
     // Search query to filter materials dynamically
     // It checks if a parameter is NULL; if so, it ignores that filter.
     @Query("SELECT m FROM Material m WHERE m.status = 'APPROVED' " +
@@ -47,4 +52,5 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     );
     // Find all materials uploaded by a specific user
     List<Material> findByUploadedBy(User user);
+
 }

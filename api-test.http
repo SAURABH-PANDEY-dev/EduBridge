@@ -1,4 +1,4 @@
-@admin_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcwOTI1NTIsImV4cCI6MTc2NzE3ODk1Mn0.XrXG2EDvga3FoMddeVqPFEbnh8xBWAExLp7S2kB9PcuZciQSNlrHKX07qXTh298R
+@admin_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcxODc0OTcsImV4cCI6MTc2NzI3Mzg5N30.ZFcDVlDKyijAhKybSiq8n9ODaXYJOBCoaKovEf4vZs4a0gal4qGtDzi3tBVv1xQT
 @student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJyb2NreWJoYWk4OTA4QGdtYWlsLmNvbSIsImlhdCI6MTc2NzE3OTQ2NiwiZXhwIjoxNzY3MjY1ODY2fQ.JVrzWc9N2u3EkbclcLBGdkFBEIpD5t-LauLarG8vV-Y4oQepYMMVZmfZlfzvi4WF
 
 ### Test 1: Register a new Student
@@ -291,3 +291,12 @@ Content-Type: application/json
 # Important: Must use the SAME USER token who created the post!
 PUT http://localhost:8080/api/forum/posts/4/comments/4/accept
 Authorization: Bearer {{student_token}}
+
+# ==========================================
+#ADMIN DASHBOARD
+#==========================================
+
+### Get Dashboard Statistics (Total Users, Materials, etc.)
+GET http://localhost:8080/api/admin/stats
+# Note: Use a Token belonging to a user with role "ADMIN"
+Authorization: Bearer {{admin_token}}
