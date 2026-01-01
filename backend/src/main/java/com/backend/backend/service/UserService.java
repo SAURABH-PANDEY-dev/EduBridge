@@ -39,4 +39,5 @@ public interface UserService {
     List<MaterialResponseDto> getMyDownloads();
     List<PostResponseDto> getMyPosts();
     List<CommentResponseDto> getMyComments();
+    String uploadProfilePic(org.springframework.web.multipart.MultipartFile file);
 }

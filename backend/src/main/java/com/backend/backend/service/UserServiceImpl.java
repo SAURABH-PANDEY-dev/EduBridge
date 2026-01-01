@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final DownloadLogRepository downloadLogRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public String changePassword(ChangePasswordDto changePasswordDto) {
@@ -169,6 +170,7 @@ public class UserServiceImpl implements UserService {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setUniversity(user.getUniversity());
+        dto.setProfilePicUrl(user.getProfilePicUrl());
         dto.setRole(user.getRole().name());
         return dto;
     }
@@ -224,5 +226,31 @@ public class UserServiceImpl implements UserService {
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String uploadProfilePic(org.springframework.web.multipart.MultipartFile file) {
+        // A. Get Current User
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (user.getProfilePicUrl() != null && !user.getProfilePicUrl().isEmpty()) {
+            try {
+                cloudinaryService.deleteFile(user.getProfilePicUrl());
+            } catch (Exception e) {
+                // Ignore error if old file not found, continue uploading new one
+                System.out.println("Could not delete old profile pic: " + e.getMessage());
+            }
+        }
+
+        // C. Upload New Image
+        String newImageUrl = cloudinaryService.uploadFile(file);
+
+        // D. Save URL to DB
+        user.setProfilePicUrl(newImageUrl);
+        userRepository.save(user);
+
+        return newImageUrl;
     }
 }

@@ -40,4 +40,5 @@ public class User {
     private String university;
     @Column(nullable = false)
     private boolean isBlocked = false; // True = User Blocked, False = Active
+    private String profilePicUrl;
 }

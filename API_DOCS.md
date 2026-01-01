@@ -470,6 +470,20 @@ Fetch all comments made by the user on various posts.
 * **Method:** `GET`
 * **Auth:** Yes
 * **Response:** List of `Comments`
+---
+### 4. Upload Profile Picture
+* **Endpoint:** `/api/users/profile-pic`
+* **Method:** `POST`
+* **Description:** Updates the user's profile picture. Supports image files (JPG, PNG, etc.).
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+  * `Content-Type`: `multipart/form-data`
+* **Form Data (Body):**
+  * `file`: The image file to upload.
+* **Response (200 OK):**
+  ```text
+    Profile picture updated successfully! URL: [https://res.cloudinary.com/](http://res.cloudinary.com/)...
+  ```
 
 <hr>
 <hr>

@@ -1,5 +1,5 @@
-@admin_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcyNjMwNDEsImV4cCI6MTc2NzM0OTQ0MX0.eYq9N033CtNa_t9cTHkMM3JuezjtYAKJe1OfgfvO9kJVUuyvdbjSgAIR0DoxBby9
-@student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJyb2NreWJoYWk4OTA4QGdtYWlsLmNvbSIsImlhdCI6MTc2NzE5MTI1OSwiZXhwIjoxNzY3Mjc3NjU5fQ.uZbhhPE97nmtFfaa65s5SjIvB5ySb9rhBqV4MiDFpv0muQzeQ7Pd7ifDi_9BAnRA
+@admin_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYXVyYWJocGFuZGV5ODkwOEBnbWFpbC5jb20iLCJpYXQiOjE3NjcyNzMxNzQsImV4cCI6MTc2NzM1OTU3NH0.QOWf1bjLOymqz9B46849zb7XV2ZasscMUVwkukEZVRUtTlWaa1K8vcr3k5XnQR3X
+@student_token = eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJyb2NreWJoYWk4OTA4QGdtYWlsLmNvbSIsImlhdCI6MTc2NzI3MzE5NSwiZXhwIjoxNzY3MzU5NTk1fQ.7fqkiQ8DBeJldR9nwFN4qtWN-KFBnVZ4MDnPyLLaKKtIdLamdtGJ8nidZln0WR1n
 
 ### Test 1: Register a new Student
 POST http://localhost:8080/api/auth/register
@@ -346,3 +346,20 @@ Content-Type: application/json
   "email": "don@admin.com",
   "password": "donpassword"
 }
+
+### Upload Profile Picture
+POST http://localhost:8080/api/users/profile-pic
+Authorization: Bearer {{admin_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="profile.jpg"
+
+< ./profile.png
+--WebAppBoundary--
+
+# Note: Ensure 'profile.jpg' exists in your project folder OR change path
+
+### Get My Profile (Check if profilePicUrl is present)
+GET http://localhost:8080/api/users/profile
+Authorization: Bearer {{student_token}}

@@ -17,6 +17,8 @@ public class UserResponseDto {
     private String email;
     private String role;
     private boolean isBlocked;
-    private LocalDateTime createdAt;
     private String university;
+    private String profilePicUrl;
+    private LocalDateTime createdAt;
+
 }
