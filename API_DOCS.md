@@ -311,7 +311,7 @@ Add Note: "Sends an email notification to the post author (unless the author is 
 ### 1. Vote on a Post (Upvote/Downvote)
 * **Endpoint:** `/api/forum/posts/{postId}/vote`
 * **Method:** `POST`
-* **Description:** Allows a user to upvote or downvote a post. Toggles the vote if clicked again (e.g., Upvote -> Remove Upvote).
+* **Description:** Allows a user to upvote or downvote a post. Toggles the vote if clicked again (e.g., Upvote → Remove Upvote).
 * **Headers:**
   * `Authorization`: `Bearer <token>`
 * **Path Parameters:**
@@ -714,3 +714,109 @@ Success Response (200 OK):
 <hr>
 <hr>
 
+# 🔖 BOOKMARKS / SAVED ITEMS
+
+### 1. Toggle Save Material
+Adds a material to the user's saved list if not present, or removes it if already saved (Like/Unlike behavior).
+
+* **Endpoint:** `/api/users/materials/{id}/save`
+* **Method:** `POST`
+* **Access:** `ROLE_STUDENT`
+* **Path Variable:**
+  * `id`: The ID of the material (e.g., `1`).
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+* **Response (200 OK):**
+    ```text
+    Material saved/unsaved successfully.
+    ```
+
+---
+
+### 2. Get Saved Materials
+Retrieves the list of all study materials saved by the logged-in user.
+
+* **Endpoint:** `/api/users/saved-materials`
+* **Method:** `GET`
+* **Access:** `ROLE_STUDENT`
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+
+**Success Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "title": "Java Basics - Chapter 1",
+    "description": "Introduction to Java syntax and loops.",
+    "subject": "Java Programming",
+    "fileUrl": "[https://res.cloudinary.com/demo/image/upload/sample.pdf](https://res.cloudinary.com/demo/image/upload/sample.pdf)",
+    "uploadDate": "2025-12-29T19:29:28",
+    "uploadedBy": "Saurabh Pandey"
+  },
+  {
+    "id": 5,
+    "title": "Data Structures Notes",
+    "description": "Linked List and Arrays",
+    "subject": "DSA",
+    "fileUrl": "[https://res.cloudinary.com/](https://res.cloudinary.com/)...",
+    "uploadDate": "2025-12-30T10:00:00",
+    "uploadedBy": "Amit Kumar"
+  }
+]
+```
+---
+
+### 3. Toggle Save Post
+Adds a forum post to the user's saved list if not present, or removes it if already saved.
+
+* **Endpoint:** `/api/users/posts/{id}/save`
+
+* **Method:** `POST`
+
+* **Access:** `ROLE_STUDENT`
+
+* **Path Variable:**
+
+`id: The ID of the post (e.g., 10).`
+
+* **Headers:**
+
+  * **Authorization:** `Bearer <token>`
+ 
+**Response (200 OK):**
+
+```Plaintext
+Post saved/unsaved successfully.
+```
+
+--- 
+### 4. Get Saved Posts
+Retrieves the list of all forum discussions/posts saved by the logged-in user.
+
+* **Endpoint:** `/api/users/saved-posts`
+
+* **Method:** `GET`
+
+* **Access:** `ROLE_STUDENT`
+* **Headers:**
+  * **Authorization:** `Bearer <token>`
+
+**Success Response (200 OK):**
+
+```JSON
+[
+  {
+    "id": 10,
+    "title": "How to fix StackOverflow Error?",
+    "content": "I am getting infinite recursion in my Java code...",
+    "createdAt": "2025-12-31T14:30:00",
+    "authorName": "Rocky Bhai"
+  }
+]
+```
+
+<hr>
+<hr>
+<hr>
+<hr>

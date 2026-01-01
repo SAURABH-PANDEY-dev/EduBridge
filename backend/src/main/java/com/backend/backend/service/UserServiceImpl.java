@@ -15,13 +15,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.backend.backend.entity.Material;
-import com.backend.backend.entity.User;
 import com.backend.backend.repository.UserRepository;
-import com.backend.backend.service.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -229,7 +224,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String uploadProfilePic(org.springframework.web.multipart.MultipartFile file) {
+    public String uploadProfilePic(MultipartFile file) {
         // A. Get Current User
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
@@ -252,5 +247,69 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return newImageUrl;
+    }
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void toggleSavedMaterial(Long materialId) {
+        User user = getCurrentUser();
+
+        com.backend.backend.entity.Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new RuntimeException("Material not found"));
+
+        if (user.getSavedMaterials().contains(material)) {
+            user.getSavedMaterials().remove(material);
+        } else {
+            user.getSavedMaterials().add(material);
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void toggleSavedPost(Long postId) {
+        User user = getCurrentUser();
+
+        com.backend.backend.entity.Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (user.getSavedPosts().contains(post)) {
+            user.getSavedPosts().remove(post);
+        } else {
+            user.getSavedPosts().add(post);
+        }
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public List<MaterialDto> getSavedMaterials() {
+        User user = getCurrentUser();
+        return user.getSavedMaterials().stream()
+                .map(material -> MaterialDto.builder()
+                        .id(material.getId())
+                        .title(material.getTitle())
+                        .description(material.getDescription())
+                        .subject(material.getSubject())
+                        .fileUrl(material.getFileUrl())
+                        .uploadDate(material.getUploadDate())
+                        .uploadedBy(material.getUploadedBy().getName()) // Break Loop
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    public List<PostDto> getSavedPosts() {
+        User user = getCurrentUser();
+        return user.getSavedPosts().stream()
+                .map(post -> PostDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .createdAt(post.getCreationDate())
+                        .authorName(post.getUser().getName()) // Break Loop
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
     }
 }

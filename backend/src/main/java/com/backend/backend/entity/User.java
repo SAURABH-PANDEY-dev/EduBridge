@@ -1,9 +1,12 @@
 package com.backend.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * Represents a User entity in the system.
@@ -41,4 +44,21 @@ public class User {
     @Column(nullable = false)
     private boolean isBlocked = false; // True = User Blocked, False = Active
     private String profilePicUrl;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_saved_materials",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "material_id")
+    )
+    @JsonIgnore
+    private List<Material> savedMaterials;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_saved_posts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    @JsonIgnore
+    private List<Post> savedPosts;
 }

@@ -404,3 +404,34 @@ Content-Type: application/json
 # Student checks history again. Status should be "RESOLVED" and adminReply should be visible.
 GET http://localhost:8080/api/support/my-tickets
 Authorization: Bearer {{student_token}}
+
+# ==========================================
+# BOOKMARKS / SAVED ITEMS
+# ==========================================
+
+### 1. Toggle Save Material (First Click -> Save)
+POST http://localhost:8080/api/users/materials/1/save
+Authorization: Bearer {{student_token}}
+
+### 2. Check Saved Materials
+# Should show the material with ID 1 in the list.
+GET http://localhost:8080/api/users/saved-materials
+Authorization: Bearer {{student_token}}
+
+### 3. Toggle Save Material Again (Second Click -> Unsave)
+# Should remove the material.
+POST http://localhost:8080/api/users/materials/1/save
+Authorization: Bearer {{student_token}}
+
+### 4. Check Saved Materials Again
+# The list should now be empty (or not contain ID 1).
+GET http://localhost:8080/api/users/saved-materials
+Authorization: Bearer {{student_token}}
+
+### 5. Toggle Save Post
+POST http://localhost:8080/api/users/posts/3/save
+Authorization: Bearer {{student_token}}
+
+### 6. Get Saved Posts
+GET http://localhost:8080/api/users/saved-posts
+Authorization: Bearer {{student_token}}

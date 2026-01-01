@@ -2,6 +2,7 @@ package com.backend.backend.service;
 
 import com.backend.backend.dto.*;
 import com.backend.backend.dto.PostResponseDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -39,5 +40,10 @@ public interface UserService {
     List<MaterialResponseDto> getMyDownloads();
     List<PostResponseDto> getMyPosts();
     List<CommentResponseDto> getMyComments();
-    String uploadProfilePic(org.springframework.web.multipart.MultipartFile file);
+    String uploadProfilePic(MultipartFile file);
+    void toggleSavedMaterial(Long materialId);
+    void toggleSavedPost(Long postId);
+    // Fetch Saved Items
+    List<MaterialDto> getSavedMaterials();
+    List<PostDto> getSavedPosts();
 }

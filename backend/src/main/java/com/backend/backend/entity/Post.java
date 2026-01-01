@@ -40,5 +40,5 @@ public class Post {
     private Integer voteCount = 0; // Stores total score (Upvotes - Downvotes)
     // Relationship with Votes (One Post -> Many Votes)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<Vote> votes;
+    private List<Vote> votes;
 }

@@ -95,10 +95,54 @@ public class UserController {
     public ResponseEntity<List<CommentResponseDto>> getMyComments() {
         return new ResponseEntity<>(userService.getMyComments(), HttpStatus.OK);
     }
-    // 👇 Upload Profile Picture
+    //Upload Profile Picture
     @PostMapping("/profile-pic")
     public ResponseEntity<String> uploadProfilePic(@RequestParam("file") MultipartFile file) {
         String imageUrl = userService.uploadProfilePic(file);
         return ResponseEntity.ok("Profile picture updated successfully! URL: " + imageUrl);
+    }
+
+    // ========================================================================
+    // BOOKMARKS / SAVED ITEMS ENDPOINTS
+    // ========================================================================
+    /**
+     * Toggles the saved status of a material (notes/pdf).
+     * If already saved, it removes it. If not, it adds it.
+     * @param materialId The ID of the material to save/unsave.
+     * @return Success message.
+     */
+    @PostMapping("/materials/{materialId}/save")
+    public ResponseEntity<String> toggleSavedMaterial(@PathVariable Long materialId) {
+        userService.toggleSavedMaterial(materialId);
+        return ResponseEntity.ok("Material saved/unsaved successfully.");
+    }
+
+    /**
+     * Toggles the saved status of a forum post.
+     * @param postId The ID of the post to save/unsave.
+     * @return Success message.
+     */
+    @PostMapping("/posts/{postId}/save")
+    public ResponseEntity<String> toggleSavedPost(@PathVariable Long postId) {
+        userService.toggleSavedPost(postId);
+        return ResponseEntity.ok("Post saved/unsaved successfully.");
+    }
+
+    /**
+     * Retrieves the list of all materials saved/bookmarked by the current user.
+     * @return List of Material entities.
+     */
+    @GetMapping("/saved-materials")
+    public ResponseEntity<java.util.List<MaterialDto>> getSavedMaterials() {
+        return ResponseEntity.ok(userService.getSavedMaterials());
+    }
+
+    /**
+     * Retrieves the list of all forum posts saved/bookmarked by the current user.
+     * @return List of Post entities.
+     */
+    @GetMapping("/saved-posts")
+    public ResponseEntity<java.util.List<PostDto>> getSavedPosts() {
+        return ResponseEntity.ok(userService.getSavedPosts());
     }
 }
