@@ -27,4 +27,6 @@ public interface ForumService {
 
     // Mark a Comment as "Best Answer" (Solved)
     void markCommentAsAccepted(Long postId, Long commentId);
+    void deletePost(Long postId);
+    void deleteComment(Long postId, Long commentId);
 }

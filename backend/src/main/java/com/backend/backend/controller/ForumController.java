@@ -74,4 +74,18 @@ public class ForumController {
         forumService.markCommentAsAccepted(postId, commentId);
         return new ResponseEntity<>("Answer marked as accepted!", HttpStatus.OK);
     }
+    @DeleteMapping("/posts/{postId}")
+    public org.springframework.http.ResponseEntity<String> deletePost(@org.springframework.web.bind.annotation.PathVariable Long postId) {
+        forumService.deletePost(postId);
+        return org.springframework.http.ResponseEntity.ok("Post deleted successfully.");
+    }
+
+    @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    public org.springframework.http.ResponseEntity<String> deleteComment(
+            @org.springframework.web.bind.annotation.PathVariable Long postId,
+            @org.springframework.web.bind.annotation.PathVariable Long commentId) {
+
+        forumService.deleteComment(postId, commentId);
+        return org.springframework.http.ResponseEntity.ok("Comment deleted successfully.");
+    }
 }

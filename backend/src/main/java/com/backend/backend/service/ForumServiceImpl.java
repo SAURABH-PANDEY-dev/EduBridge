@@ -191,4 +191,51 @@ public class ForumServiceImpl implements ForumService {
         comment.setAccepted(true);
         commentRepository.save(comment);
     }
+    @Override
+    public void deletePost(Long postId) {
+        // 1. Get Current User
+        User currentUser = getCurrentUser();
+
+        // 2. Find Post
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+
+        // 3. Security Check: Is Owner OR Admin?
+        boolean isOwner = post.getUser().getId().equals(currentUser.getId());
+        // Check Admin Role (safely)
+        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this post.");
+        }
+
+        // 4. Delete
+        postRepository.delete(post);
+    }
+
+    @Override
+    public void deleteComment(Long postId, Long commentId) {
+        // 1. Get Current User
+        User currentUser = getCurrentUser();
+
+        // 2. Find Comment
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + commentId));
+
+        // Validation: Comment belongs to post?
+        if (!comment.getPost().getId().equals(postId)) {
+            throw new RuntimeException("Comment does not belong to the specified post.");
+        }
+
+        // 3. Security Check: Is Comment Owner OR Admin?
+        boolean isOwner = comment.getUser().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this comment.");
+        }
+
+        // 4. Delete
+        commentRepository.delete(comment);
+    }
 }

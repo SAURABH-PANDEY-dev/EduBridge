@@ -361,6 +361,37 @@ Allows a student to rate (1-5) and review a material.
     ```text
     Answer marked as accepted!
     ```
+---
+### 4. Delete a Post
+* **Endpoint:** `/api/forum/posts/{postId}`
+* **Method:** `DELETE`
+* **Description:** Deletes a post.
+    * **Owner:** Can delete their own post.
+    * **Admin:** Can delete ANY post (Moderation).
+* **Headers:**
+    * `Authorization`: `Bearer <token>`
+* **Path Parameters:**
+    * `postId`: ID of the post to delete.
+* **Response (200 OK):**
+    ```text
+    Post deleted successfully.
+    ```
+---
+### 5. Delete a Comment
+* **Endpoint:** `/api/forum/posts/{postId}/comments/{commentId}`
+* **Method:** `DELETE`
+* **Description:** Deletes a specific comment.
+    * **Owner:** Can delete their own comment.
+    * **Admin:** Can delete ANY comment.
+* **Headers:**
+    * `Authorization`: `Bearer <token>`
+* **Path Parameters:**
+    * `postId`: ID of the post.
+    * `commentId`: ID of the comment.
+* **Response (200 OK):**
+    ```text
+    Comment deleted successfully.
+    ```
 
 <hr>
 <hr>
