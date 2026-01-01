@@ -138,16 +138,27 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public void deleteMaterial(Long id) {
-        // 1. Find the material
+        // 1. Get Current User
+        User currentUser = getCurrentUser();
+
+        // 2. Find the material
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Material not found with id: " + id));
 
-        // 2. Delete the actual file from Cloudinary
+        // 3. Security Check: Is User the Owner OR is User an ADMIN?
+        boolean isOwner = material.getUploadedBy().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this material.");
+        }
+
+        // 4. Delete the actual file from Cloudinary
         if (material.getFileUrl() != null) {
             cloudinaryService.deleteFile(material.getFileUrl());
         }
 
-        // 3. Delete from Database
+        // 5. Delete from Database
         materialRepository.delete(material);
     }
     @Override
