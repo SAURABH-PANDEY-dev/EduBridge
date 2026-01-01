@@ -517,5 +517,25 @@ Fetch all comments made by the user on various posts.
     ```text
     User block status updated successfully.
     ```
+---  
+
+### 4. Create New Admin
+* **Endpoint:** `/api/admin/create-admin`
+* **Method:** `POST`
+* **Description:** Creates a new user with **ADMIN** role. Only existing Admins can perform this action.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Request Body (JSON):**
+    ```json
+    {
+      "name": "New Admin Name",
+      "email": "newadmin@example.com",
+      "password": "securepassword"
+    }
+    ```
+* **Response (201 Created):**
+    ```text
+    New Admin registered successfully!
+    ```
   
 <hr>

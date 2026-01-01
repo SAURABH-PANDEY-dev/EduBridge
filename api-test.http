@@ -333,3 +333,16 @@ Authorization: Bearer {{admin_token}}
 ### 2. Delete a Comment (As Admin)
 DELETE http://localhost:8080/api/forum/posts/3/comments/4
 Authorization: Bearer {{admin_token}}
+# ==========================================
+# CREATE NEW ADMIN
+#==========================================
+### 1. Create a New Admin (Only accessible by current Admin)
+POST http://localhost:8080/api/admin/create-admin
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "name": "Chhota Don",
+  "email": "don@admin.com",
+  "password": "donpassword"
+}
