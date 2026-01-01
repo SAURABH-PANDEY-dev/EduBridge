@@ -10,6 +10,7 @@ import com.backend.backend.entity.User;
 import com.backend.backend.repository.CommentRepository;
 import com.backend.backend.repository.PostRepository;
 import com.backend.backend.repository.UserRepository;
+import com.backend.backend.repository.VoteRepository;
 import com.backend.backend.service.ForumService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +28,8 @@ public class ForumServiceImpl implements ForumService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final com.backend.backend.repository.VoteRepository voteRepository;
+    private final VoteRepository voteRepository;
+    private final EmailService emailService;
 
     // Helper to get currently logged-in user
     private User getCurrentUser() {
@@ -69,6 +71,15 @@ public class ForumServiceImpl implements ForumService {
         comment.setUser(user);
 
         Comment savedComment = commentRepository.save(comment);
+        if (!post.getUser().getId().equals(user.getId())) {
+            String subject = "New Comment on your Post 💬";
+            String body = "Hi " + post.getUser().getName() + ",\n\n" +
+                          user.getName() + " commented on your post '" + post.getTitle() + "':\n\n" +
+                          "\"" + savedComment.getContent() + "\"";
+
+            emailService.sendSimpleEmail(post.getUser().getEmail(), subject, body);
+        }
+
         return mapToCommentResponse(savedComment);
     }
 
@@ -209,7 +220,13 @@ public class ForumServiceImpl implements ForumService {
             throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this post.");
         }
 
-        // 4. Delete
+        //  ADMIN DELETE NOTIFICATION
+        if (isAdmin && !isOwner) {
+            String subject = "Post Deleted by Admin ⚠️";
+            String body = "Hi " + post.getUser().getName() + ",\n\nYour post '" + post.getTitle() + "' was deleted by the Administrator due to violation of community guidelines.";
+            emailService.sendSimpleEmail(post.getUser().getEmail(), subject, body);
+        }
+
         postRepository.delete(post);
     }
 
@@ -235,7 +252,12 @@ public class ForumServiceImpl implements ForumService {
             throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this comment.");
         }
 
-        // 4. Delete
+        // 👇 ADMIN DELETE NOTIFICATION
+        if (isAdmin && !isOwner) {
+            String subject = "Comment Deleted by Admin ⚠️";
+            String body = "Hi " + comment.getUser().getName() + ",\n\nYour comment on the post '" + comment.getPost().getTitle() + "' was removed by the Administrator.";
+            emailService.sendSimpleEmail(comment.getUser().getEmail(), subject, body);
+        }
         commentRepository.delete(comment);
     }
 }

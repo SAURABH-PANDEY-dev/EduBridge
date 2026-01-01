@@ -28,6 +28,7 @@ public class MaterialServiceImpl implements MaterialService {
     private final CloudinaryService cloudinaryService;
     private final DownloadLogRepository downloadLogRepository;
     private final ReviewRepository reviewRepository;
+    private final EmailService emailService;
 
     @Override
     public MaterialResponseDto uploadMaterial(MaterialDto materialDto) {
@@ -134,7 +135,12 @@ public class MaterialServiceImpl implements MaterialService {
 
         material.setStatus("APPROVED");
         materialRepository.save(material);
-    }
+
+    String subject = "Material Approved! 🎉";
+    String body = "Hi " + material.getUploadedBy().getName() + ",\n\nYour material '" + material.getTitle() + "' has been APPROVED and is now live on the platform.";
+
+    emailService.sendSimpleEmail(material.getUploadedBy().getEmail(), subject, body);
+}
 
     @Override
     public void deleteMaterial(Long id) {
@@ -146,13 +152,19 @@ public class MaterialServiceImpl implements MaterialService {
                 .orElseThrow(() -> new RuntimeException("Material not found with id: " + id));
 
         // 3. Security Check: Is User the Owner OR is User an ADMIN?
-        boolean isOwner = material.getUploadedBy().getId().equals(currentUser.getId());
-        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+    boolean isOwner = material.getUploadedBy().getId().equals(currentUser.getId());
+    boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
 
-        if (!isOwner && !isAdmin) {
-            throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this material.");
-        }
-
+    if (!isOwner && !isAdmin) {
+        throw new org.springframework.security.access.AccessDeniedException("You are not authorized to delete this material.");
+    }
+    if (isAdmin && !isOwner) {
+        String subject = "Material Deleted by Admin ⚠️";
+        String body = "Hi " + material.getUploadedBy().getName()
+                + ",\n\nYour material '" + material.getTitle()
+                + "' was deleted by the Administrator due to content policy violations.";
+        emailService.sendSimpleEmail(material.getUploadedBy().getEmail(), subject, body);
+    }
         // 4. Delete the actual file from Cloudinary
         if (material.getFileUrl() != null) {
             cloudinaryService.deleteFile(material.getFileUrl());

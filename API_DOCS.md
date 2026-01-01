@@ -159,6 +159,10 @@ Changes the status of a material from PENDING to APPROVED.
 - **Success Response:**
   - **Code:** 200 OK
   - **Content:** `"Material approved successfully."`
+
+```text
+Add Note: "Sends an approval email to the student who uploaded the material.
+```
 <hr>
 
 ### Delete Material
@@ -169,6 +173,9 @@ Permanently removes a material from the database and deletes the associated file
 - **Success Response:**
   - **Code:** 200 OK
   - **Content:** `"Material and associated file deleted successfully."`
+```text
+Add Note: "If deleted by Admin, an alert email is sent to the content owner."
+````
 <hr>
 <hr>
 <hr>
@@ -287,7 +294,9 @@ Allows a student to rate (1-5) and review a material.
 "postId": 1
 }
 ```
-
+```text
+Add Note: "Sends an email notification to the post author (unless the author is commenting on their own post)."
+```
 <hr>
 
 ### 4. Get Post Comments
@@ -376,6 +385,10 @@ Allows a student to rate (1-5) and review a material.
     ```text
     Post deleted successfully.
     ```
+
+```text
+Add Note: "If deleted by Admin, an alert email is sent to the content owner."
+````
 ---
 ### 5. Delete a Comment
 * **Endpoint:** `/api/forum/posts/{postId}/comments/{commentId}`
@@ -392,6 +405,10 @@ Allows a student to rate (1-5) and review a material.
     ```text
     Comment deleted successfully.
     ```
+
+```text
+Add Note: "If deleted by Admin, an alert email is sent to the content owner."
+````
 
 <hr>
 <hr>
@@ -517,7 +534,9 @@ Fetch all comments made by the user on various posts.
     ```text
     User block status updated successfully.
     ```
----  
+```text
+Add Note: "Triggers an email notification to the user informing them about the account status change."
+```
 
 ### 4. Create New Admin
 * **Endpoint:** `/api/admin/create-admin`
@@ -539,3 +558,5 @@ Fetch all comments made by the user on various posts.
     ```
   
 <hr>
+
+

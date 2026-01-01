@@ -22,6 +22,7 @@ public class AdminServiceImpl implements AdminService {
     private final MaterialRepository materialRepository;
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public AdminStatsDto getDashboardStats() {
@@ -52,6 +53,13 @@ public class AdminServiceImpl implements AdminService {
 
         user.setBlocked(!user.isBlocked());
         userRepository.save(user);
+
+        String subject = user.isBlocked() ? "Account Blocked Alert ⚠️" : "Account Reactivated ✅";
+    String body = user.isBlocked()
+            ? "Hello " + user.getName() + ",\n\nYour account has been BLOCKED by the Administrator due to policy violations. Contact support for details."
+            : "Hello " + user.getName() + ",\n\nGood news! Your account has been UNBLOCKED. You can login now.";
+
+    emailService.sendSimpleEmail(user.getEmail(), subject, body);
     }
     @Override
     public void createAdmin(RegisterDto registerDto) {
