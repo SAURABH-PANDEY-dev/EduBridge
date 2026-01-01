@@ -572,5 +572,145 @@ Add Note: "Triggers an email notification to the user informing them about the a
     ```
   
 <hr>
+<hr>
+<hr>
+<hr>
 
+# 📨 SUPPORT & FEEDBACK MODULE
+
+### 1. Create a Support Ticket
+Allows a logged-in user (Student) to submit a new query or complaint to the administration. The ticket is created with a default status of `OPEN`.
+
+* **Endpoint:** `/api/support`
+* **Method:** `POST`
+* **Access:** `ROLE_STUDENT`, `ROLE_ADMIN`
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+  * `Content-Type`: `application/json`
+
+**Request Body:**
+```json
+{
+  "subject": "Download Error",
+  "message": "I am unable to download the notes for Java Unit 3. It gives a 404 error."
+}
+```
+Success Response (200 OK):
+
+```JSON
+{
+  "id": 1,
+  "userName": "Rocky Bhai",
+  "userEmail": "rocky@gmail.com",
+  "subject": "Download Error",
+  "message": "I am unable to download the notes for Java Unit 3. It gives a 404 error.",
+  "adminReply": null,
+  "status": "OPEN",
+  "createdAt": "2025-01-02T10:00:00",
+  "resolvedAt": null
+}
+```
+---
+### 2. Get My Ticket History
+Fetches the list of all support tickets created by the currently logged-in user. Useful for checking the status of previous queries.
+* **Endpoint:** `/api/support/my-tickets`
+* **Method:** `GET`
+* **Access:** `ROLE_STUDENT`
+
+* **Headers:**
+`Authorization`: `Bearer <token>`
+
+Success Response (200 OK):
+
+```JSON
+[
+  {
+    "id": 1,
+    "subject": "Download Error",
+    "message": "...",
+    "adminReply": null,
+    "status": "OPEN",
+    "createdAt": "2025-01-02T10:00:00"
+  },
+  {
+    "id": 5,
+    "subject": "Login Issue",
+    "message": "...",
+    "adminReply": "Password reset link sent.",
+    "status": "RESOLVED",
+    "createdAt": "2024-12-25T14:30:00"
+  }
+]
+```
+---
+### 3. Get All Tickets (Admin Dashboard)
+Allows the Administrator to view all support tickets raised by all users. The list is sorted by creation date (newest first).
+* **Endpoint:** `/api/admin/support`
+* **Method:** `GET`
+* **Access:** `ROLE_ADMIN`
+* **Headers:**
+`Authorization`: `Bearer <token>`
+
+Success Response (200 OK):
+
+```JSON
+
+[
+  {
+    "id": 2,
+    "userName": "Amit Kumar",
+    "userEmail": "amit@test.com",
+    "subject": "Wrong Syllabus",
+    "status": "OPEN",
+    "createdAt": "2025-01-02T11:00:00"
+  },
+  {
+    "id": 1,
+    "userName": "Rocky Bhai",
+    "userEmail": "rocky@gmail.com",
+    "subject": "Download Error",
+    "status": "OPEN",
+    "createdAt": "2025-01-02T10:00:00"
+  }
+]
+```
+---
+### 4. Resolve & Reply to Ticket
+Allows the Administrator to reply to a specific ticket. System Action: This will update the status to RESOLVED, save the admin's reply, and automatically send an email notification to the student.
+
+* **Endpoint:** `/api/admin/support/{id}/reply`
+* **Method:** `PUT`
+* **Access:** `ROLE_ADMIN`
+* **Path Variable:**
+`id: The ID of the support ticket (e.g., 1).`
+* **Headers:**
+`Authorization`: `Bearer <token>`
+`Content-Type`: `application/json`
+
+Request Body:
+
+```JSON
+{
+  "replyMessage": "Hello, the issue has been fixed. Please try downloading the file again."
+}
+```
+Success Response (200 OK):
+
+```JSON
+{
+  "id": 1,
+  "userName": "Rocky Bhai",
+  "userEmail": "rocky@gmail.com",
+  "subject": "Download Error",
+  "message": "I am unable to download the notes...",
+  "adminReply": "Hello, the issue has been fixed. Please try downloading the file again.",
+  "status": "RESOLVED",
+  "createdAt": "2025-01-02T10:00:00",
+  "resolvedAt": "2025-01-02T12:05:00"
+}
+```
+<hr>
+<hr>
+<hr>
+<hr>
 

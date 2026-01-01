@@ -363,3 +363,44 @@ Content-Disposition: form-data; name="file"; filename="profile.jpg"
 ### Get My Profile (Check if profilePicUrl is present)
 GET http://localhost:8080/api/users/profile
 Authorization: Bearer {{student_token}}
+
+# ==========================================
+# SUPPORT & FEEDBACK SYSTEM (TICKET SYSTEM)
+# ==========================================
+
+### 1. Create a Support Ticket (As Student)
+# Creates a query regarding a login issue or notes request.
+POST http://localhost:8080/api/support
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "subject": "Download Issue",
+  "message": "I am unable to download the Java Notes PDF. It shows a 404 error."
+}
+
+### 2. Check My Ticket History (As Student)
+# Should show the ticket created above with status "OPEN".
+GET http://localhost:8080/api/support/my-tickets
+Authorization: Bearer {{student_token}}
+
+### 3. View All Tickets (As Admin)
+# Admin checks the dashboard for any pending queries.
+GET http://localhost:8080/api/admin/support
+Authorization: Bearer {{admin_token}}
+
+### 4. Resolve/Reply to Ticket (As Admin) - TRIGGERS EMAIL 📧
+# Replace '1' with the actual Ticket ID from the previous step.
+# This will send an email to the student.
+PUT http://localhost:8080/api/admin/support/2/reply
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "replyMessage": "Hello, we checked the server logs. The file was temporarily moved. Please try again now, it is fixed."
+}
+
+### 5. Verify Resolution (As Student)
+# Student checks history again. Status should be "RESOLVED" and adminReply should be visible.
+GET http://localhost:8080/api/support/my-tickets
+Authorization: Bearer {{student_token}}
