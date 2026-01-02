@@ -443,3 +443,16 @@ Authorization: Bearer {{student_token}}
 ### 6. Get Saved Posts
 GET http://localhost:8080/api/users/saved-posts
 Authorization: Bearer {{student_token}}
+
+# ==========================================
+# TEST EXCEPTION HANDLER
+# ==========================================
+
+### 7. Trigger Error (Get Material that doesn't exist)
+GET http://localhost:8080/api/materials/66666
+Authorization: Bearer {{student_token}}
+
+###  Trigger Error (Try to download a file that doesn't exist)
+# Hum "download" endpoint use kar rahe hain kyunki ye Public hai
+GET http://localhost:8080/api/materials/99999/download
+Authorization: Bearer {{student_token}}
