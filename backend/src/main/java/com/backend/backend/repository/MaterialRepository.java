@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.backend.backend.dto.TopContributorDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import java.util.List;
 import com.backend.backend.entity.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
@@ -52,5 +56,12 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     );
     // Find all materials uploaded by a specific user
     List<Material> findByUploadedBy(User user);
+    List<Material> findTop5ByOrderByDownloadCountDesc();
+
+    @Query("SELECT new com.backend.backend.dto.TopContributorDto(m.uploadedBy.name, COUNT(m)) " +
+            "FROM Material m " +
+            "GROUP BY m.uploadedBy.name " +
+            "ORDER BY COUNT(m) DESC")
+    List<TopContributorDto> findTopContributors(Pageable pageable);
 
 }

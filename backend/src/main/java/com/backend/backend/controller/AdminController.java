@@ -1,13 +1,13 @@
 package com.backend.backend.controller;
 
-import com.backend.backend.dto.AdminStatsDto;
-import com.backend.backend.dto.RegisterDto;
-import com.backend.backend.dto.UserResponseDto;
+import com.backend.backend.dto.*;
 import com.backend.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -38,5 +38,14 @@ public class AdminController {
     public ResponseEntity<String> createAdmin(@RequestBody RegisterDto registerDto) {
         adminService.createAdmin(registerDto);
         return new ResponseEntity<>("New Admin registered successfully!", HttpStatus.CREATED);
+    }
+    @GetMapping("/stats/top-contributors")
+    public ResponseEntity<List<TopContributorDto>> getTopContributors() {
+        return ResponseEntity.ok(adminService.getTopContributors());
+    }
+
+    @GetMapping("/stats/trending-materials")
+    public ResponseEntity<List<TrendingMaterialDto>> getTrendingMaterials() {
+        return ResponseEntity.ok(adminService.getTrendingMaterials());
     }
 }

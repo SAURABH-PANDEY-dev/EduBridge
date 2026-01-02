@@ -1,18 +1,19 @@
 package com.backend.backend.service;
 
-import com.backend.backend.dto.AdminStatsDto;
-import com.backend.backend.dto.RegisterDto;
-import com.backend.backend.dto.UserResponseDto;
+import com.backend.backend.dto.*;
 import com.backend.backend.entity.Role;
 import com.backend.backend.entity.User;
 import com.backend.backend.repository.MaterialRepository;
 import com.backend.backend.repository.PostRepository;
 import com.backend.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -81,5 +82,21 @@ public class AdminServiceImpl implements AdminService {
 
         // 3. Save to DB
         userRepository.save(user);
+    }
+
+    @Override
+    public List<TopContributorDto> getTopContributors() {
+        return materialRepository.findTopContributors(PageRequest.of(0, 5));
+    }
+    @Override
+    public List<TrendingMaterialDto> getTrendingMaterials() {
+        return materialRepository.findTop5ByOrderByDownloadCountDesc().stream()
+                .map(m -> TrendingMaterialDto.builder()
+                        .title(m.getTitle())
+                        .subject(m.getSubject())
+                        .downloadCount(m.getDownloadCount())
+                        .uploadedBy(m.getUploadedBy().getName())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
     }
 }

@@ -551,6 +551,7 @@ Fetch all comments made by the user on various posts.
 ```text
 Add Note: "Triggers an email notification to the user informing them about the account status change."
 ```
+---
 
 ### 4. Create New Admin
 * **Endpoint:** `/api/admin/create-admin`
@@ -570,7 +571,52 @@ Add Note: "Triggers an email notification to the user informing them about the a
     ```text
     New Admin registered successfully!
     ```
-  
+---
+### 5. Get Top Contributors
+* **Endpoint:** `/api/admin/stats/top-contributors`
+* **Method:** `GET`
+* **Description:** Returns a list of users who have uploaded the most study materials, sorted by upload count.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Response (200 OK):**
+    ```json
+    [
+      {
+        "name": "Rocky Bhai",
+        "uploadCount": 15
+      },
+      {
+        "name": "Saurabh Pandey",
+        "uploadCount": 8
+      }
+    ]
+    ```
+---
+
+### 6. Get Trending Materials
+* **Endpoint:** `/api/admin/stats/trending-materials`
+* **Method:** `GET`
+* **Description:** Returns top 5 study materials based on the number of downloads.
+* **Headers:**
+  * `Authorization`: `Bearer <admin_token>`
+* **Response (200 OK):**
+    ```json
+    [
+      {
+        "title": "Java Complete Notes",
+        "subject": "Java Programming",
+        "downloadCount": 150,
+        "uploadedBy": "Rocky Bhai"
+      },
+      {
+        "title": "Data Structure PYQs",
+        "subject": "DSA",
+        "downloadCount": 89,
+        "uploadedBy": "Amit Kumar"
+      }
+    ]
+    ```
+
 <hr>
 <hr>
 <hr>
