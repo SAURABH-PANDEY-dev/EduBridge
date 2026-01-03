@@ -505,7 +505,7 @@ Fetch all comments made by the user on various posts.
   * `file`: The image file to upload.
 * **Response (200 OK):**
   ```text
-    Profile picture updated successfully! URL: [https://res.cloudinary.com/](http://res.cloudinary.com/)...
+    Profile picture updated successfully! URL: [https://res.cloudinary.com/](https://res.cloudinary.com/)...
   ```
 
 <hr>

@@ -1,0 +1,369 @@
+# ==========================================
+# EDU BRIDGE AUTOMATED TESTING SUITE
+# Base URL: http://localhost:8080/api
+# ==========================================
+
+### Variables Setup
+@baseUrl = http://localhost:8080/api
+@studentEmail = student_auto@example.com
+@studentPassword = password123
+@adminEmail = admin_auto@example.com
+@adminPassword = adminpass123
+
+# ==========================================
+# 1. AUTHENTICATION & SETUP
+# ==========================================
+
+### 1. Register a NEW STUDENT (Captures User ID)
+# @name registerStudent
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Rocky Auto",
+  "email": "{{studentEmail}}",
+  "password": "{{studentPassword}}",
+  "role": "STUDENT"
+}
+
+> {%
+    client.global.set("student_id", response.body.id);
+    client.log("Created Student ID: " + response.body.id);
+%}
+
+### 2. Register a NEW ADMIN
+# @name registerAdmin
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Saurabh Admin Auto",
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}",
+  "role": "ADMIN"
+}
+
+### 3. Login as STUDENT (Captures Token)
+# @name loginStudent
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{studentEmail}}",
+  "password": "{{studentPassword}}"
+}
+
+> {%
+    client.global.set("student_token", response.body);
+    client.log("Student Token Saved");
+%}
+
+### 4. Login as ADMIN (Captures Token)
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+> {%
+    client.global.set("admin_token", response.body);
+    client.log("Admin Token Saved");
+%}
+
+### 5. Upload Material (Captures Material ID)
+# @name uploadMaterial
+POST {{baseUrl}}/materials/upload
+Authorization: Bearer {{student_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Automated Java Notes
+--boundary
+Content-Disposition: form-data; name="description"
+
+Testing dynamic IDs
+--boundary
+Content-Disposition: form-data; name="subject"
+
+Java Programming
+--boundary
+Content-Disposition: form-data; name="type"
+
+NOTE
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+This is a dummy file content for testing.
+--boundary--
+
+> {%
+    client.global.set("material_id", response.body.id);
+    client.log("Captured Material ID: " + response.body.id);
+%}
+
+### 6. Get Pending Materials
+GET {{baseUrl}}/materials/pending
+Authorization: Bearer {{admin_token}}
+
+### 7. Approve Material (Uses Captured ID)
+PUT {{baseUrl}}/materials/{{material_id}}/approve
+Authorization: Bearer {{admin_token}}
+
+### 8. Update Material Metadata
+PUT {{baseUrl}}/materials/{{material_id}}
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "title": "Automated Notes (Updated)",
+  "description": "Updated via script",
+  "subject": "Java",
+  "semester": "Semester 3",
+  "year": "2nd Year",
+  "type": "NOTE"
+}
+
+### 9. Download Material
+GET {{baseUrl}}/materials/{{material_id}}/download
+
+### 10. Add Review to Material
+POST {{baseUrl}}/materials/{{material_id}}/reviews
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "comment": "Automated review test."
+}
+
+### 11. Create Post (Captures Post ID)
+# @name createPost
+POST {{baseUrl}}/forum/posts
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "title": "Automated Post Title",
+  "content": "Checking if ID capture works.",
+  "category": "Doubt"
+}
+
+> {%
+    client.global.set("post_id", response.body.id);
+    client.log("Captured Post ID: " + response.body.id);
+%}
+
+### 12. Add Comment (Uses Captured Post ID & Captures Comment ID)
+POST {{baseUrl}}/forum/comments
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "content": "Automated comment.",
+  "postId": {{post_id}}
+}
+
+> {%
+    client.global.set("comment_id", response.body.id);
+%}
+
+### 13. Vote on Post
+POST {{baseUrl}}/forum/posts/{{post_id}}/vote
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "voteType": "UPVOTE"
+}
+
+### 14. Mark Comment as Accepted
+PUT {{baseUrl}}/forum/posts/{{post_id}}/comments/{{comment_id}}/accept
+Authorization: Bearer {{student_token}}
+
+
+# ==========================================
+# 4. USER PROFILE & SAVED ITEMS
+# ==========================================
+
+### 15. Toggle Save Material (Uses Material ID)
+POST {{baseUrl}}/users/materials/{{material_id}}/save
+Authorization: Bearer {{student_token}}
+
+### 16. Get Saved Materials
+GET {{baseUrl}}/users/saved-materials
+Authorization: Bearer {{student_token}}
+
+### 17. Toggle Save Post (Uses Post ID)
+POST {{baseUrl}}/users/posts/{{post_id}}/save
+Authorization: Bearer {{student_token}}
+
+
+# ==========================================
+# 5. SUPPORT & FEEDBACK
+# ==========================================
+
+### 18. Create Support Ticket (Captures Ticket ID)
+POST {{baseUrl}}/support
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "subject": "Automated Ticket",
+  "message": "Testing flow."
+}
+
+> {%
+    client.global.set("ticket_id", response.body.id);
+%}
+
+### 19. Reply to Ticket (Admin)
+PUT {{baseUrl}}/admin/support/{{ticket_id}}/reply
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "replyMessage": "Automated Reply."
+}
+
+
+
+
+### 20. Block/Unblock User (Uses Student ID captured at start)
+PUT {{baseUrl}}/admin/users/{{student_id}}/toggle-block
+Authorization: Bearer {{admin_token}}
+
+### 21. Delete Post (Uses Post ID)
+DELETE {{baseUrl}}/forum/posts/{{post_id}}
+Authorization: Bearer {{student_token}}
+
+### 22. Delete Material (Uses Material ID)
+DELETE {{baseUrl}}/materials/{{material_id}}
+Authorization: Bearer {{admin_token}}
+
+# ==========================================
+# 🌩️ EDGE CASE & SECURITY TESTING SUITE
+# (We expect these requests to FAIL safely)
+# ==========================================
+
+### 🛑 1. Auth: Register with DUPLICATE Email
+# Expect: 400 Bad Request or 500 (Depending on DB constraint)
+# Goal: Ensure unique emails are enforced.
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Clone User",
+  "email": "{{studentEmail}}",
+  "password": "password123",
+  "role": "STUDENT"
+}
+
+> {%
+    client.test("Duplicate Email should fail", function() {
+        client.assert(response.status !== 200, "Server accepted duplicate email!");
+    });
+%}
+
+### 🛑 2. Auth: Login with WRONG Password
+# Expect: 401 Unauthorized or 400 Bad Request
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{studentEmail}}",
+  "password": "WrongPassword123"
+}
+
+> {%
+    client.test("Wrong password should fail", function() {
+        client.assert(response.status === 401 || response.status === 400 || response.status === 500, "Logged in with wrong password!");
+    });
+%}
+
+### 🛑 3. Security: Student tries to Access ADMIN Endpoint
+# Expect: 403 Forbidden
+# Goal: Ensure Role-Based Access Control (RBAC) works.
+GET {{baseUrl}}/admin/users
+Authorization: Bearer {{student_token}}
+
+> {%
+    client.test("Student cannot access Admin API", function() {
+        client.assert(response.status === 403, "Security Breach: Student accessed Admin API!");
+    });
+%}
+
+### 🛑 4. Security: Access API without Token
+# Expect: 401 Unauthorized or 403 Forbidden
+GET {{baseUrl}}/users/profile
+
+> {%
+    client.test("Public access should be blocked", function() {
+        client.assert(response.status === 401 || response.status === 403, "API is open without token!");
+    });
+%}
+
+### 🛑 5. Material: Upload with MISSING Required Fields
+POST {{baseUrl}}/materials/upload
+Authorization: Bearer {{student_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="description"
+
+Title and Subject are missing!
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+Content
+--boundary--
+
+> {%
+    client.test("Missing fields should fail", function() {
+        client.assert(response.status === 400 || response.status === 500, "Uploaded material without Title/Subject!");
+    });
+%}
+
+### 🛑 6. Logic: Download Non-Existent Material
+# Expect: 400 Bad Request (Handled by Global Exception Handler)
+# Goal: Ensure server doesn't crash on invalid ID.
+}
+
+### 🛑 7. Logic: Vote on Non-Existent Post
+# Expect: 400 Bad Request or 404 Not Found
+POST {{baseUrl}}/forum/posts/999999/vote
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "voteType": "UPVOTE"
+}
+
+> {%
+    client.test("Voting on invalid post should fail", function() {
+        client.assert(response.status !== 200, "Voted on a post that doesn't exist!");
+    });
+%}
+
+### 🛑 8. Security: Delete Someone Else's Post (As Student)
+# Step 1: Login as Admin to create a post (Assuming Admin has a token)
+# Step 2: Login as Student and try to delete it.
+# (Here we assume Post ID 1 exists and might belong to someone else.
+# Ideally, we create a post by User A, then try delete by User B).
+# Simplified Test: Student tries to delete a non-owned post.
+DELETE {{baseUrl}}/forum/posts/100
+Authorization: Bearer {{student_token}}
+
+> {%
+    client.test("Student cannot delete others' post", function() {
+        // If ID 100 doesn't exist, it's 400. If exists & not owner, it's 403.
+        // Both are acceptable failures for this test.
+        client.assert(response.status !== 200, "Student deleted a post they don't own!");
+    });
+%}

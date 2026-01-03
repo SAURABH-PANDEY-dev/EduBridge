@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.backend.dto.LoginDto;
+import org.springframework.web.util.HtmlUtils;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * REST Controller for Authentication endpoints.
@@ -25,24 +29,21 @@ public class AuthController {
 
     /**
      * Endpoint to register a new user.
-     * URL: POST http://localhost:8080/api/auth/register
-     *
      * @param registerDto The user data sent in the request body (JSON).
      * @return ResponseEntity containing the success message and HTTP status code.
      */
     @PostMapping("/register") // Maps HTTP POST requests to this method
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDto registerDto) {
         // Call the service layer to perform the business logic (validation, saving to DB)
         String response = authService.register(registerDto);
-
+        String safeResponse = HtmlUtils.htmlEscape(response);
+        Map<String, String> jsonResponse = Collections.singletonMap("message", safeResponse);
         // Return the response with HTTP Status 201 (Created)
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
     }
 
     /**
      * Endpoint to authenticate a user and return a JWT Token.
-     * URL: POST http://localhost:8080/api/auth/login
      *
      * @param loginDto Contains email and password.
      * @return ResponseEntity containing the JWT Token.

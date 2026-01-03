@@ -1,7 +1,6 @@
 package com.backend.backend.service;
 
 import com.backend.backend.dto.*;
-import com.backend.backend.dto.PostResponseDto;
 import com.backend.backend.entity.User;
 import com.backend.backend.repository.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.backend.backend.entity.Material;
-import com.backend.backend.repository.UserRepository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

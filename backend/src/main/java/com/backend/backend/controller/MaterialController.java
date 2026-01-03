@@ -2,7 +2,6 @@ package com.backend.backend.controller;
 
 import com.backend.backend.dto.MaterialDto;
 import com.backend.backend.dto.MaterialResponseDto;
-import com.backend.backend.entity.Material;
 import com.backend.backend.service.MaterialService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;

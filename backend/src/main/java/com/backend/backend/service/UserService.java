@@ -1,7 +1,6 @@
 package com.backend.backend.service;
 
 import com.backend.backend.dto.*;
-import com.backend.backend.dto.PostResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

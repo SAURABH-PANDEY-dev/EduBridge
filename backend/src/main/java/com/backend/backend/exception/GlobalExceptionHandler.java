@@ -9,23 +9,20 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
+//@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.backend.backend.controller")
 public class GlobalExceptionHandler {
-
-    // 1. Specific Error: Agar koi cheez nahi milti (Resource Not Found)
-    // Humne code mein kai jagah `throw new RuntimeException("Material not found")` likha hai
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
-                ex.getMessage(), // Jo message humne service mein likha tha
+                ex.getMessage(),
                 request.getDescription(false),
                 HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // 2. Generic Error: Agar koi aur anjaan error aa jaye (NullPointer, Database down, etc.)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) {
         ErrorResponse error = new ErrorResponse(

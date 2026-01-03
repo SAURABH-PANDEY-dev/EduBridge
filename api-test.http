@@ -162,6 +162,7 @@ Content-Type: application/json
 }
 
 ### 4. Get Comments of a Post
+@post_id = 5
 GET http://localhost:8080/api/forum/posts/{{post_id}}/comments
 Authorization: Bearer {{student_token}}
 

@@ -1,18 +1,13 @@
 package com.backend.backend.repository;
 
-import com.backend.backend.entity.Material;
 import com.backend.backend.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.backend.backend.dto.TopContributorDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import java.util.List;
 import com.backend.backend.entity.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 
 import java.util.List;
 

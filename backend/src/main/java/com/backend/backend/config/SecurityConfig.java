@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf((csrf) -> csrf.disable()) // Disabling CSRF as we will use JWT (Stateless)
+        http.csrf(AbstractHttpConfigurer::disable) // Disabling CSRF as we will use JWT (Stateless)
                 .authorizeHttpRequests((authorize) -> {
                     // Allow anyone to access these APIs
                     authorize.requestMatchers("/api/auth/**").permitAll();
@@ -52,7 +53,7 @@ public class SecurityConfig {
                     authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();
                     authorize.requestMatchers("/api/admin/**").hasAuthority("ADMIN");
-                    // Lock down everything else - requires authentication
+                    authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     authorize.anyRequest().authenticated();
                 });
         // Add our custom JWT Filter before the standard UsernamePasswordAuthenticationFilter
