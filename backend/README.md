@@ -63,3 +63,37 @@ spring.mail.password=YOUR_APP_PASSWORD  # Not your login password, use App Passw
 cloudinary.cloud-name=YOUR_CLOUD_NAME
 cloudinary.api-key=YOUR_API_KEY
 cloudinary.api-secret=YOUR_API_SECRET
+```
+
+### 3. Run the Application
+Navigate to the backend folder and run:
+```
+Bash
+mvn clean install
+mvn spring-boot:run
+```
+The server will start at: http://localhost:8080             
+
+# 🔗 API Documentation (Swagger UI)
+We use SpringDoc OpenAPI for automated documentation. Once the server is running, the Frontend team can test APIs here:
+
+👉 http://localhost:8080/swagger-ui/index.html
+
+🧪 Testing
+Postman/Insomnia: Import the Swagger URL to auto-generate collections.
+
+Admin Setup: To create the first Admin, use the /api/admin/create-admin endpoint (secured) or manually inject via SQL.
+
+# 📂 Project Structure
+```Plaintext
+
+com.backend.backend
+├── config/          # Security (JWT, CORS) & Swagger Config
+├── controller/      # REST API Endpoints (Auth, Forum, Material, etc.)
+├── dto/             # Data Transfer Objects (Requests/Responses)
+├── entity/          # JPA Entities (Database Tables)
+├── repository/      # JPA Repositories (DB Access)
+└── service/         # Business Logic
+```
+# 🤝 Contribution
+Backend Lead: <a href = "github.com/saurabh-pandey-dev"> <b><u> Saurabh Pandey </u></b> </a>
