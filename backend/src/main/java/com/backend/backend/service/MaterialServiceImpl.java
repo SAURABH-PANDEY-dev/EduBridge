@@ -2,6 +2,8 @@ package com.backend.backend.service;
 
 import com.backend.backend.dto.MaterialDto;
 import com.backend.backend.dto.MaterialResponseDto;
+import com.backend.backend.dto.MaterialUpdateDto;
+import com.backend.backend.dto.ReviewDto;
 import com.backend.backend.entity.Material;
 import com.backend.backend.entity.Review;
 import com.backend.backend.entity.User;
@@ -14,10 +16,11 @@ import org.springframework.stereotype.Service;
 
 import com.backend.backend.entity.DownloadLog;
 import com.backend.backend.repository.DownloadLogRepository;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import com.backend.backend.repository.ReviewRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 @AllArgsConstructor
@@ -220,7 +223,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public com.backend.backend.dto.ReviewDto addReview(Long materialId, com.backend.backend.dto.ReviewDto reviewDto) {
+    public com.backend.backend.dto.ReviewDto addReview(Long materialId, ReviewDto reviewDto) {
         User user = getCurrentUser(); // Reuse existing helper
 
         Material material = materialRepository.findById(materialId)
@@ -248,5 +251,76 @@ public class MaterialServiceImpl implements MaterialService {
         response.setCreatedAt(savedReview.getCreatedAt());
 
         return response;
+    }
+
+    @Override
+    public MaterialResponseDto updateMaterial(Long id, MaterialUpdateDto updateDto) {
+        // 1. Fetch Existing Material
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material not found with id: " + id));
+
+        // 2. Get Current User & Check Permissions
+        User currentUser = getCurrentUser();
+        boolean isOwner = material.getUploadedBy().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            throw new AccessDeniedException("You are not authorized to update this material.");
+        }
+
+        // 3. Track Changes (For Admin Notification)
+        StringBuilder changesLog = new StringBuilder();
+
+        // Update Title
+        if (updateDto.getTitle() != null && !updateDto.getTitle().equals(material.getTitle())) {
+            changesLog.append(String.format("- Title changed from '%s' to '%s'\n", material.getTitle(), updateDto.getTitle()));
+            material.setTitle(updateDto.getTitle());
+        }
+
+        // Update Description
+        if (updateDto.getDescription() != null && !updateDto.getDescription().equals(material.getDescription())) {
+            changesLog.append("- Description updated.\n");
+            material.setDescription(updateDto.getDescription());
+        }
+
+        // Update Subject
+        if (updateDto.getSubject() != null && !updateDto.getSubject().equals(material.getSubject())) {
+            changesLog.append(String.format("- Subject changed from '%s' to '%s'\n", material.getSubject(), updateDto.getSubject()));
+            material.setSubject(updateDto.getSubject());
+        }
+
+        // Update Semester
+        if (updateDto.getSemester() != null && !updateDto.getSemester().equals(material.getSemester())) {
+            changesLog.append(String.format("- Semester changed from '%s' to '%s'\n", material.getSemester(), updateDto.getSemester()));
+            material.setSemester(updateDto.getSemester());
+        }
+
+        // Update Year
+        if (updateDto.getYear() != null && !updateDto.getYear().equals(material.getYear())) {
+            changesLog.append(String.format("- Year changed from '%s' to '%s'\n", material.getYear(), updateDto.getYear()));
+            material.setYear(updateDto.getYear());
+        }
+
+        // Update Type
+        if (updateDto.getType() != null && !updateDto.getType().equals(material.getType())) {
+            changesLog.append(String.format("- Type changed from '%s' to '%s'\n", material.getType(), updateDto.getType()));
+            material.setType(updateDto.getType());
+        }
+
+        // 4. Save Updated Entity
+        Material updatedMaterial = materialRepository.save(material);
+
+        // 5. Send Email if Admin made changes to someone else's content
+        if (isAdmin && !isOwner && changesLog.length() > 0) {
+            String subject = "Your Study Material was Updated by Admin ⚠️";
+            String body = "Hi " + material.getUploadedBy().getName() + ",\n\n" +
+                    "An Administrator has updated the metadata of your upload to ensure accuracy.\n\n" +
+                    "Changes made:\n" + changesLog.toString() + "\n" +
+                    "If you have questions, please contact support.";
+
+            emailService.sendSimpleEmail(material.getUploadedBy().getEmail(), subject, body);
+        }
+
+        return mapToDto(updatedMaterial);
     }
 }

@@ -107,4 +107,17 @@ public class MaterialController {
         com.backend.backend.dto.ReviewDto savedReview = materialService.addReview(id, reviewDto);
         return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
     }
+    /**
+     * Endpoint to Update Material Metadata (No File Change).
+     * Accessible by Owner and ADMIN.
+     * URL: PUT http://localhost:8080/api/materials/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<MaterialResponseDto> updateMaterial(
+            @PathVariable Long id,
+            @RequestBody com.backend.backend.dto.MaterialUpdateDto updateDto) {
+
+        MaterialResponseDto response = materialService.updateMaterial(id, updateDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

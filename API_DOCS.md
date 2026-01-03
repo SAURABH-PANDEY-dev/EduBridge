@@ -255,6 +255,29 @@ Allows a student to rate (1-5) and review a material.
 "createdAt": "2025-12-31T12:00:00"
 }
 ```
+---
+### 7. Update Material Metadata
+* **Endpoint:** `/api/materials/{id}`
+* **Method:** `PUT`
+* **Description:** Updates the details (metadata) of an existing material. The file itself cannot be changed here.
+* **Permissions:**
+  * **Owner:** Can update their own material.
+  * **ADMIN:** Can update any material (triggers an email notification to the owner).
+* **Headers:**
+  * `Authorization`: `Bearer <token>`
+  * `Content-Type`: `application/json`
+* **Request Body:**
+    ```json
+    {
+      "title": "Java Complete Notes (Revised)",
+      "description": "Updated description with new topics.",
+      "subject": "Java",
+      "semester": "Semester 2",
+      "year": "2nd Year",
+      "type": "NOTE"
+    }
+    ```
+* **Response (200 OK):** Returns the updated material object.
 
 <hr>
 <hr>

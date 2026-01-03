@@ -456,3 +456,35 @@ Authorization: Bearer {{student_token}}
 # Hum "download" endpoint use kar rahe hain kyunki ye Public hai
 GET http://localhost:8080/api/materials/99999/download
 Authorization: Bearer {{student_token}}
+
+# ==========================================
+# TEST: UPDATE MATERIAL METADATA (NO FILE)
+# ==========================================
+
+### 1. Update Material by OWNER (Student)
+PUT http://localhost:8080/api/materials/1
+Authorization: Bearer {{student_token}}
+Content-Type: application/json
+
+{
+  "title": "Java Basics - Updated by Student",
+  "description": "Updated description to include OOP concepts.",
+  "subject": "Java Programming",
+  "semester": "Semester 2",
+  "year": "1st Year",
+  "type": "NOTE"
+}
+
+### 2. Update Material by ADMIN
+PUT http://localhost:8080/api/materials/4
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "title": "Java Basics - Corrected by Admin",
+  "description": "Admin fixed the spelling mistakes in description.",
+  "subject": "Java Programming",
+  "semester": "Semester 2",
+  "year": "1st Year",
+  "type": "NOTE"
+}

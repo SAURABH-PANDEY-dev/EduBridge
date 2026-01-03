@@ -2,7 +2,8 @@ package com.backend.backend.service;
 
 import com.backend.backend.dto.MaterialDto;
 import com.backend.backend.dto.MaterialResponseDto;
-import com.backend.backend.entity.Material;
+import com.backend.backend.dto.MaterialUpdateDto;
+import com.backend.backend.dto.ReviewDto;
 
 import java.util.List;
 
@@ -39,5 +40,6 @@ public interface MaterialService {
     // Increment count and return the actual file URL
     String downloadMaterial(Long id);
     // Add a review to a material
-    com.backend.backend.dto.ReviewDto addReview(Long materialId, com.backend.backend.dto.ReviewDto reviewDto);
+    ReviewDto addReview(Long materialId, ReviewDto reviewDto);
+    MaterialResponseDto updateMaterial(Long id, MaterialUpdateDto updateDto);
 }
