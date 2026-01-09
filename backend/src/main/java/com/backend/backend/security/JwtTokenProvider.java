@@ -35,9 +35,11 @@ public class JwtTokenProvider {
         String username = authentication.getName();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
 
         return Jwts.builder()
                 .setSubject(username) // Who is this token for? (User's Email)
+                .claim("role", role) //what is the role of user
                 .setIssuedAt(currentDate) // When was it created?
                 .setExpiration(expireDate) // When will it expire?
                 .signWith(key()) // Sign it with our secret key

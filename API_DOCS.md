@@ -35,6 +35,7 @@ Success Response (200 OK):
 }
 ```
 <hr>
+
 ### B. Login User
 Used to authenticate a user and receive a JWT Token.
 
@@ -56,6 +57,7 @@ Returns a JWT Token string :
 This token must be included in the header of all future requests: Authorization: Bearer <token>
 ```
 <hr>
+
 ### C. Change Password
 Allows a logged-in user to change their password.
 
