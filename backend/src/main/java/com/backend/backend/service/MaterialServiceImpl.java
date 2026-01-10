@@ -172,7 +172,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (material.getFileUrl() != null) {
             cloudinaryService.deleteFile(material.getFileUrl());
         }
-
+        materialRepository.removeMaterialFromUserSaves(id);
         // 5. Delete from Database
         materialRepository.delete(material);
     }
