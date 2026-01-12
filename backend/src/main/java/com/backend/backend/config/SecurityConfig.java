@@ -56,6 +56,7 @@ public class SecurityConfig {
                     authorize.requestMatchers("/api/users/forgot-password").permitAll();
                     authorize.requestMatchers("/api/users/reset-password").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials/search").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/materials/subjects").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();

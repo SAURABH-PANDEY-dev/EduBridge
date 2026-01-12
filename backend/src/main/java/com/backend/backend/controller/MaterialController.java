@@ -2,6 +2,7 @@ package com.backend.backend.controller;
 
 import com.backend.backend.dto.MaterialDto;
 import com.backend.backend.dto.MaterialResponseDto;
+import com.backend.backend.repository.MaterialRepository;
 import com.backend.backend.service.MaterialService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -118,5 +119,11 @@ public class MaterialController {
 
         MaterialResponseDto response = materialService.updateMaterial(id, updateDto);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/subjects")
+    public ResponseEntity<List<String>> getAllSubjects() {
+        List<String> subjects = materialService.getAllSubjects();
+        return ResponseEntity.ok(subjects);
     }
 }

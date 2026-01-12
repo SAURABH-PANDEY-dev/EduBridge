@@ -323,4 +323,8 @@ public class MaterialServiceImpl implements MaterialService {
 
         return mapToDto(updatedMaterial);
     }
+
+    public List<String> getAllSubjects() {
+        return materialRepository.findAllDistinctSubjects();
+    }
 }

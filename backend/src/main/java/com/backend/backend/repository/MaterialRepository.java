@@ -67,4 +67,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query(value = "DELETE FROM user_saved_materials WHERE material_id = :materialId", nativeQuery = true)
     void removeMaterialFromUserSaves(@Param("materialId") Long materialId);
 
+    @Query("SELECT DISTINCT m.subject FROM Material m WHERE m.status = 'APPROVED'")
+    List<String> findAllDistinctSubjects();
 }
