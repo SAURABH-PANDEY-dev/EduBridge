@@ -48,7 +48,7 @@ public class MaterialServiceImpl implements MaterialService {
         Material material = new Material();
         material.setTitle(materialDto.getTitle());
         material.setDescription(materialDto.getDescription());
-        material.setSubject(materialDto.getSubject());
+        material.setSubject(materialDto.getSubject().toLowerCase());
         material.setSemester(materialDto.getSemester());
         material.setYear(materialDto.getYear());
         material.setType(materialDto.getType());
