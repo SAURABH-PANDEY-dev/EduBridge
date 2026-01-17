@@ -14,19 +14,27 @@ export const AuthProvider = ({ children }) => {
 
     // LOGIN
     const login = async (email, password) => {
-        const response = await api.post("/auth/login", {
-            email,
-            password,
-        });
-
-        const token = response.data; // backend returns raw JWT string
-
-        localStorage.setItem("token", token);
-
-        // decode not required now; user details fetched later
-        setUser({ email });
-
-        return true;
+        try {
+            const response = await api.post("/auth/login", {
+                email,
+                password,
+            });
+    
+            const token = response.data; // backend returns raw JWT string
+            localStorage.setItem("token", token);
+    
+            //fetch proflie to get role 
+            const profileRes = await api.get("/api/users/profile");
+            
+            const userData = profileRes.data;
+            localStorage.setItem("user", JSON.stringify(userData));
+            setUser(userData);
+    
+            return true;
+            
+        } catch (err) {
+            throw new Error(`Login Failed due to :-  ${err.message}`);
+        }
     };
 
     // REGISTER
