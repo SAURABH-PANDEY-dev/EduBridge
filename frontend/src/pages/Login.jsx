@@ -15,7 +15,8 @@ function Login() {
             await login(email, password);
             navigate("/dashboard");
         } catch (error) {
-            alert("Invalid credentials as :- ", error);
+            console.log(error);
+            alert("Invalid credentials as ");
         }
     };
 
@@ -42,7 +43,14 @@ function Login() {
                     />
 
                     <button type="submit">Login</button>
-                </form>
+                </form> 
+
+                <p className="register-text">
+                    Forgot Password?{" "}
+                    <Link to="/forgot-password" className="register-link">
+                        Click Here
+                    </Link>
+                </p>
 
                 <p className="register-text">
                     Don't have an account?{" "}

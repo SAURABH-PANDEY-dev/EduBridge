@@ -31,7 +31,8 @@ function Register() {
             alert("Registration successful");
             navigate("/");
         } catch (error) {
-            alert("Registration failed as :- ",error);
+            console.log(error);
+            alert("Registration failed ");
         }
     };
 

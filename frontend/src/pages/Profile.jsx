@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     getMyProfile,
     updateProfile,
@@ -10,7 +11,8 @@ function Profile() {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [image, setImage] = useState(null);
-
+    const navigate = useNavigate();
+    
     // Fetch profile on page load
     useEffect(() => {
         fetchProfile();
@@ -21,7 +23,8 @@ function Profile() {
             const res = await getMyProfile();
             setProfile(res.data);
         } catch (err) {
-            alert("Failed to load profile due to : ", err);
+            console.log(err);
+            alert("Failed to load profile");
         } finally {
             setLoading(false);
         }
@@ -36,7 +39,8 @@ function Profile() {
             });
             alert("Profile updated successfully");
         } catch (err) {
-            alert("Profile update failed due to : ", err);
+            console.log(err);
+            alert("Profile update failed");
         }
     };
 
@@ -46,13 +50,13 @@ function Profile() {
             alert("Please select an image");
             return;
         }
-
         try {
             const res = await uploadProfilePic(image);
             alert(res.data); // backend returns text message
             fetchProfile(); // refresh profile
         } catch (err) {
-            alert("Image upload failed due to : ", err);
+            console.log(err);
+            alert("Image upload failed");
         }
     };
 
@@ -108,6 +112,13 @@ function Profile() {
                 />
 
                 <button onClick={handleUpdate}>Update Profile</button>
+
+                <hr />
+
+                <button onClick={() => navigate("/change-password")}>
+                    Change Password
+                </button>
+
             </div>
         </div>
     );

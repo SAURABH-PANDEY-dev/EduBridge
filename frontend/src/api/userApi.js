@@ -31,3 +31,19 @@ export const uploadProfilePic = (file) => {
         },
     });
 };
+
+/* Change password (logged-in user)  */
+export const changePassword = (data) => {
+    return api.post("/api/users/change-password", data);
+};
+
+/* Request password reset token. */
+export const forgotPassword = (email) => {
+    return api.post("/api/users/forgot-password", { email });
+};
+
+/*  Reset password using token  */
+export const resetPassword = (data) => {
+    return api.post("/api/users/reset-password", data);
+};
+

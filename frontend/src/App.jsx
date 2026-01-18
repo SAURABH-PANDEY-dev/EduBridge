@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-// import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+// import Dashboard from "./pages/Dashboard";
 // import AdminPanel from "./pages/AdminPanel";
+import ChangePassword from "./pages/ChangePassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import RoleProtectedRoute from "./auth/RoleProtectedRoute";
 
@@ -13,6 +16,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Authenticated Users */}
         {/* <Route
@@ -33,15 +39,24 @@ function App() {
           }
         />
 
-        {/* Admin Only 
         <Route
+          path="/change-password"
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Only */}
+        {/* <Route
           path="/admin"
           element={
             <RoleProtectedRoute allowedRoles={["ADMIN"]}>
               <AdminPanel />
             </RoleProtectedRoute>
           }
-        />*/}
+        /> */}
       </Routes>
     </BrowserRouter>
   );
