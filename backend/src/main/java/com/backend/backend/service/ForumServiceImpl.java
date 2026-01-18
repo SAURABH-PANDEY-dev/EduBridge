@@ -118,6 +118,7 @@ public class ForumServiceImpl implements ForumService {
         dto.setCreationDate(comment.getCreationDate());
         dto.setUserName(comment.getUser().getName());
         dto.setUserId(comment.getUser().getId());
+        dto.setAccepted(comment.isAccepted());
         return dto;
     }
     @Override
@@ -197,7 +198,7 @@ public class ForumServiceImpl implements ForumService {
             throw new RuntimeException("Only the author of the post can mark an answer as accepted.");
         }
 
-        com.backend.backend.entity.Comment comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
         comment.setAccepted(true);
         commentRepository.save(comment);
