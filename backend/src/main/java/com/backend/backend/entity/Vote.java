@@ -18,7 +18,7 @@ public class Vote {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private VoteType voteType; // UPVOTE or DOWNVOTE
+    private VoteType voteType; // UPVOTE or DOWNVOTE.
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")

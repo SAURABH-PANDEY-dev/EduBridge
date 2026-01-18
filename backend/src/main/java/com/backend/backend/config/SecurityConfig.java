@@ -15,6 +15,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Configuration class for Spring Security.
  * This class defines how users are authenticated and which URLs are accessible.
@@ -43,12 +49,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable) // Disabling CSRF as we will use JWT (Stateless)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> {
                     // Allow anyone to access these APIs
                     authorize.requestMatchers("/api/auth/**").permitAll();
                     authorize.requestMatchers("/api/users/forgot-password").permitAll();
                     authorize.requestMatchers("/api/users/reset-password").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials/search").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/materials/subjects").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();
@@ -68,5 +76,17 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

@@ -2,9 +2,11 @@ package com.backend.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,10 +37,23 @@ public class Post {
     // One post have multiple comments
     // CascadeType.ALL means: Post delete means comments delete
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Comment> comments;
     private Integer viewCount = 0; // To track how many people viewed it
     private Integer voteCount = 0; // Stores total score (Upvotes - Downvotes)
     // Relationship with Votes (One Post -> Many Votes)
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Vote> votes;
+
+    @ManyToMany(mappedBy = "savedPosts")
+    @ToString.Exclude
+    private List<User> savedByUsers = new ArrayList<>();
+
+    @PreRemove
+    private void removePostFromSavedList() {
+        for (User u : savedByUsers) {
+            u.getSavedPosts().remove(this);
+        }
+    }
 }

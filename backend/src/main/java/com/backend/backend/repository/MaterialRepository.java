@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 import com.backend.backend.dto.TopContributorDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 import com.backend.backend.entity.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -59,4 +61,12 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
             "ORDER BY COUNT(m) DESC")
     List<TopContributorDto> findTopContributors(Pageable pageable);
 
+    // 👇 Method to remove references from the 'user_saved_materials' join table
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM user_saved_materials WHERE material_id = :materialId", nativeQuery = true)
+    void removeMaterialFromUserSaves(@Param("materialId") Long materialId);
+
+    @Query("SELECT DISTINCT m.subject FROM Material m WHERE m.status = 'APPROVED'")
+    List<String> findAllDistinctSubjects();
 }

@@ -42,4 +42,5 @@ public interface MaterialService {
     // Add a review to a material
     ReviewDto addReview(Long materialId, ReviewDto reviewDto);
     MaterialResponseDto updateMaterial(Long id, MaterialUpdateDto updateDto);
+    List<String> getAllSubjects();
 }

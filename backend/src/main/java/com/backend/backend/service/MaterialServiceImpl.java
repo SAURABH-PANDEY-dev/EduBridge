@@ -48,7 +48,7 @@ public class MaterialServiceImpl implements MaterialService {
         Material material = new Material();
         material.setTitle(materialDto.getTitle());
         material.setDescription(materialDto.getDescription());
-        material.setSubject(materialDto.getSubject());
+        material.setSubject(materialDto.getSubject().toLowerCase());
         material.setSemester(materialDto.getSemester());
         material.setYear(materialDto.getYear());
         material.setType(materialDto.getType());
@@ -172,7 +172,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (material.getFileUrl() != null) {
             cloudinaryService.deleteFile(material.getFileUrl());
         }
-
+        materialRepository.removeMaterialFromUserSaves(id);
         // 5. Delete from Database
         materialRepository.delete(material);
     }
@@ -322,5 +322,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
 
         return mapToDto(updatedMaterial);
+    }
+
+    public List<String> getAllSubjects() {
+        return materialRepository.findAllDistinctSubjects();
     }
 }
