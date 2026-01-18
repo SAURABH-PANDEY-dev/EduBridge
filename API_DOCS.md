@@ -7,33 +7,69 @@ This document serves as a contract between the Backend and Frontend.
 
 ## 1. User Authentication
 
-### A. Register User
-Used to create a new account (Student or Admin).
+### A. Register User (Two-Step Process)
+   Registration is now secured via Email OTP verification.
+
+### **Step 1:** Request OTP
+Validates user details and sends a 6-digit OTP to the provided email.
+
+* **Endpoint:** `/auth/send-otp`
+
+* **Method:** `POST`
+
+* **Content-Type:** `application/json`
+
+* **Request Body:**
+
+```JSON
+{
+"name": "Saurabh Pandey",
+"email": "saurabh@example.com",
+"password": "securePassword123",
+"role": "STUDENT"
+}
+```
+**Success Response (200 OK):**
+
+```Plaintext
+
+OTP sent successfully to saurabh@example.com
+```
+
+### **Step 2:** Verify OTP & Create Account
+Verifies the OTP and creates the user account in the database.
 
 * **Endpoint:** `/auth/register`
+
 * **Method:** `POST`
+
 * **Content-Type:** `application/json`
-* **Note: Role must be either "STUDENT" or "ADMIN" (Uppercase).**
 
-**Request Body (JSON to send from Frontend):**
-```json
+* **Request Body:** (Send the same details as Step 1, plus the OTP)
+
+```JSON
+
 {
-  "name": "Saurabh Pandey",
-  "email": "saurabh@example.com",
-  "password": "securePassword123",
-  "role": "STUDENT"
+"name": "Saurabh Pandey",
+"email": "saurabh@example.com",
+"password": "securePassword123",
+"role": "STUDENT",
+"otp": "123456"
 }
 ```
 
-Success Response (200 OK):
-```json
+**Success Response (200 OK):**
+
+```JSON
+
 {
-  "id": 1,
-  "name": "Saurabh Pandey",
-  "email": "saurabh@example.com",
-  "role": "STUDENT"
+"id": 1,
+"name": "Saurabh Pandey",
+"email": "saurabh@example.com",
+"role": "STUDENT"
 }
 ```
+<hr>
 <hr>
 
 ### B. Login User

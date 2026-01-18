@@ -24,4 +24,7 @@ public interface AuthService {
      * @return A JWT Token string.
      */
     String login(LoginDto loginDto);
+
+    String sendRegistrationOtp(RegisterDto registerDto);
+    String registerUser(RegisterDto registerDto);
 }
