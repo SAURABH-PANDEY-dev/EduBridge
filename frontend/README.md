@@ -1,16 +1,158 @@
-# React + Vite
+# 🎨 EduBridge - Frontend Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> User-Facing Web Interface for the EduBridge Platform.
+> Built with React to provide a secure, role-based, and responsive learning experience for Students and Admins.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 📖 Overview
 
-## React Compiler
+The EduBridge Frontend is a Single Page Application (SPA) built using React and styled with Tailwind CSS. It consumes secure REST APIs exposed by the Spring Boot backend and enforces authentication, authorization, and role-based access control entirely on the client side.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The application is designed with modular components, protected routing, and centralized state management for authentication.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# 🧩 Key Features
+
+## 🔐 Authentication & Security
+
+User Registration & Login (JWT-based)
+
+Persistent login using localStorage
+
+Change Password & Forgot/Reset Password flows
+
+Role-based route protection (STUDENT / ADMIN)
+
+## 👤 User Dashboard
+
+Sidebar navigation with responsive fallback (horizontal tabs)
+
+My Profile (view/update profile & profile picture)
+
+My Uploads (status: PENDING / APPROVED)
+
+Download History
+
+My Comment / Post History
+
+Secure Logout
+
+## 🧭 Routing & Access Control
+
+ProtectedRoute for authenticated access
+
+RoleProtectedRoute for admin-only features
+
+Clean redirection on session expiry or logout
+
+## 🎨 UI & Styling
+
+Tailwind CSS utility-first styling
+
+Responsive layouts (Desktop / Mobile)
+
+Reusable components (Sidebar, Tabs, Forms)
+
+---
+
+# ⚙️ Tech Stack
+
+Category | Technology
+|
+Framework | React 18
+Build Tool | Vite
+Styling | Tailwind CSS
+Routing | React Router DOM
+HTTP Client | Axios
+Auth | JWT (Bearer Token)
+State Mgmt | React Context API
+
+---
+
+# ⚙️ Setup & Installation
+
+### 1. Prerequisites
+
+Ensure the following are installed:
+
+Node.js (v18+)
+
+npm or yarn
+
+### 2. Clone the Repository
+
+git clone <frontend-repo-url>
+cd frontend
+
+### 3. Install Dependencies
+
+npm install
+
+### 4. Environment Configuration
+
+Create a .env file in the project root:
+
+VITE_API_BASE_URL=http://localhost:8080
+
+> This should match the backend base URL.
+
+### 5. Run the Application
+
+npm run dev
+
+The application will start at: 👉 http://localhost:5173
+
+---
+
+# 🔗 API Integration
+
+All API calls are centralized using Axios with an interceptor for JWT handling.
+
+Authorization: Bearer <JWT_TOKEN>
+
+Handled automatically once the user logs in.
+
+---
+
+# 📂 Project Structure
+
+src/
+├── api/ # Axios instance & API functions
+├── auth/ # AuthContext & security logic
+├── components/ # Reusable UI components
+├── pages/ # Route-based pages (Dashboard, Profile, etc.)
+│ └── dashboard/ # User dashboard sections
+├── routes/ # Protected & role-based routes
+├── styles/ # Global styles (Tailwind)
+├── App.js # App entry
+└── main.jsx # React bootstrap
+
+---
+
+# 🧪 Testing Checklist
+
+Login / Logout flow
+
+Role-based route blocking
+
+Profile update & image upload
+
+Dashboard navigation (Sidebar + Tabs)
+
+API error handling (401 / 403)
+
+---
+
+# 🤝 Contribution
+
+## Frontend Lead:
+
+<a href="https://github.com/BleedingEdge2004"><b><u>Sachin Kumar Yadav</u></b></a>
+
+---
+
+# 🚀 Status
+
+Frontend is actively aligned with backend APIs and ready for feature expansion (Study Materials, Forum, Admin Dashboard).
