@@ -28,4 +28,6 @@ public class RegisterDto {
     @NotBlank(message = "Role is required")
     @Pattern(regexp = "STUDENT|ADMIN", message = "Role must be either STUDENT or ADMIN") // Ensures only specific values are accepted
     private String role;
+
+    private String otp;
 }

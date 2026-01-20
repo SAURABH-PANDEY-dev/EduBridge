@@ -7,9 +7,10 @@ Content-Type: application/json
 
 {
   "name": "Rocky Bhai",
-  "email": "rockybhai8908@gmail.com",
+  "email": "crazykille8908@gmail.com",
   "password": "rocky",
-  "role": "STUDENT"
+  "role": "STUDENT",
+  "otp": "775463"
 }
 
 ### Test 2: Login User (Get Token)

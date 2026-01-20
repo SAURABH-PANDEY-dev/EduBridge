@@ -27,19 +27,29 @@ public class AuthController {
 
     private AuthService authService;
 
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestBody RegisterDto registerDto) {
+        try {
+            String message = authService.sendRegistrationOtp(registerDto);
+            return ResponseEntity.ok(message);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     /**
      * Endpoint to register a new user.
      * @param registerDto The user data sent in the request body (JSON).
      * @return ResponseEntity containing the success message and HTTP status code.
      */
-    @PostMapping("/register") // Maps HTTP POST requests to this method
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDto registerDto) {
-        // Call the service layer to perform the business logic (validation, saving to DB)
-        String response = authService.register(registerDto);
-        String safeResponse = HtmlUtils.htmlEscape(response);
-        Map<String, String> jsonResponse = Collections.singletonMap("message", safeResponse);
-        // Return the response with HTTP Status 201 (Created)
-        return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
+        try {
+            // Service ab OTP verify karke hi user banayega
+            return ResponseEntity.ok(authService.registerUser(registerDto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     /**
