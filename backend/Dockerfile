@@ -2,7 +2,7 @@
 # Hum Java 21 wala Maven image use kar rahe hain
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY . .
+COPY .. .
 RUN mvn clean package -DskipTests
 
 
