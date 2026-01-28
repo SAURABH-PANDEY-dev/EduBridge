@@ -59,7 +59,9 @@ public class SecurityConfig {
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials/subjects").permitAll();
                     authorize.requestMatchers(HttpMethod.GET,"/api/materials").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/materials/*/download").permitAll();
-                    authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();
+//                    authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").authenticated();
+                    authorize.requestMatchers(HttpMethod.GET,"/api/forum/**").permitAll();
+                    authorize.requestMatchers("/api/forum/**").authenticated();
                     authorize.requestMatchers("/api/admin/**").hasAuthority("ADMIN");
                     authorize.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     authorize.anyRequest().authenticated();
@@ -80,7 +82,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000","https://edu-bridge-my-frontend.vercel.app/","https://edu-bridge-my-frontend-saurabh-pandeys-projects-4a221e29.vercel.app/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000","https://edu-bridge-my-frontend.vercel.app","https://edu-bridge-my-frontend-saurabh-pandeys-projects-4a221e29.vercel.app"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
